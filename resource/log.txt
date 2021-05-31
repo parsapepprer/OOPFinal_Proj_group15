@@ -14,3 +14,41 @@
 31/05/2021 - 01:15:24, [INFO], The user returned to the game menu.
 31/05/2021 - 01:15:27, [INFO], The user logged out.
 31/05/2021 - 01:15:27, [INFO], A user closed the game.
+31/05/2021 - 12:42:46, [INFO], A user wanted to log in.
+31/05/2021 - 12:42:58, [INFO], User MHZ
+31/05/2021 - 12:43:01, [ERROR], The user entered an incorrect password.
+31/05/2021 - 12:43:02, [INFO], A user closed the game.
+31/05/2021 - 12:43:38, [INFO], A user wanted to log in.
+31/05/2021 - 12:43:40, [INFO], User MHZ
+31/05/2021 - 12:43:40, [ERROR], An invalid number was entered.
+31/05/2021 - 12:43:45, [INFO], A user wanted to log in.
+31/05/2021 - 12:43:47, [ERROR], The user entered a username not existing.
+31/05/2021 - 12:43:50, [INFO], A user wanted to log in.
+31/05/2021 - 12:43:52, [INFO], User MHZ
+31/05/2021 - 12:43:52, [ERROR], An invalid number was entered.
+31/05/2021 - 12:44:07, [ERROR], An invalid number was entered.
+31/05/2021 - 12:44:09, [INFO], A user wanted to log in.
+31/05/2021 - 12:44:12, [INFO], User MHZ
+31/05/2021 - 12:44:12, [ERROR], An invalid number was entered.
+31/05/2021 - 12:44:21, [INFO], A user closed the game.
+31/05/2021 - 12:48:19, [INFO], A user wanted to log in.
+31/05/2021 - 12:48:21, [INFO], User MHZ
+31/05/2021 - 12:48:21, [ERROR], An invalid number was entered.
+31/05/2021 - 12:48:25, [INFO], A user wanted to log in.
+31/05/2021 - 12:48:28, [INFO], User MHZ
+31/05/2021 - 12:48:28, [ERROR], An invalid number was entered.
+31/05/2021 - 12:48:30, [INFO], A user wanted to log in.
+31/05/2021 - 12:48:32, [ERROR], The user entered a username not existing.
+31/05/2021 - 12:48:34, [INFO], A user closed the game.
+31/05/2021 - 12:49:00, [INFO], A user wanted to log in.
+31/05/2021 - 12:49:02, [INFO], User MHZ
+31/05/2021 - 12:49:02, [ERROR], An invalid number was entered.
+31/05/2021 - 12:49:07, [INFO], A user closed the game.
+31/05/2021 - 12:49:16, [INFO], A user wanted to log in.
+31/05/2021 - 12:49:20, [INFO], User MHZ
+31/05/2021 - 12:49:23, [ERROR], An invalid number was entered.
+31/05/2021 - 12:49:30, [INFO], A user closed the game.
+31/05/2021 - 12:49:52, [INFO], A user wanted to log in.
+31/05/2021 - 12:49:53, [INFO], User MHZ
+31/05/2021 - 12:51:13, [ERROR], An invalid number was entered.
+31/05/2021 - 12:51:16, [INFO], A user closed the game.
