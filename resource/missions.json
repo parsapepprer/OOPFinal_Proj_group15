@@ -1,0 +1,44 @@
+{
+  "1": {
+    "numberOfInitialCoins": 100,
+    "wildAnimalsTime": {
+      "Lion": 10,
+      "Bear": 20
+    },
+    "tasks": {
+      "Egg": 6,
+      "Chicken": 3
+    },
+    "maxPrizeTime": 50,
+    "prize": 70
+  },
+  "2": {
+    "numberOfInitialCoins": 100,
+    "wildAnimalsTime": {
+      "Lion1": 10,
+      "Bear1": 20,
+      "Bear2": 30
+    },
+    "tasks": {
+      "Egg": 6,
+      "Chicken": 3
+    },
+    "maxPrizeTime": 50,
+    "prize": 70
+  },
+  "3": {
+    "numberOfInitialCoins": 100,
+    "wildAnimalsTime": {
+      "Lion1": 10,
+      "Lion2": 10,
+      "Bear1": 20,
+      "Bear2": 30
+    },
+    "tasks": {
+      "Egg": 6,
+      "Chicken": 3
+    },
+    "maxPrizeTime": 50,
+    "prize": 70
+  }
+}

@@ -1,0 +1,16 @@
+31/05/2021 - 01:14:59, [ADMIN], New level 3 was added to levels!
+31/05/2021 - 01:15:09, [INFO], A user wanted to log in.
+31/05/2021 - 01:15:10, [INFO], User MHZ
+31/05/2021 - 01:15:14, [INFO], MHZ entered the game menu.
+31/05/2021 - 01:15:16, [INFO], The user wanted to start the game.
+31/05/2021 - 01:15:18, [INFO], The user entered the level.
+31/05/2021 - 01:15:18, [ERROR], The user entered a locked level.
+31/05/2021 - 01:15:19, [INFO], The user wanted to start the game.
+31/05/2021 - 01:15:20, [INFO], The user entered the level.
+31/05/2021 - 01:15:20, [ERROR], The user entered a locked level.
+31/05/2021 - 01:15:23, [INFO], The user wanted to start the game.
+31/05/2021 - 01:15:23, [INFO], The user entered the level.
+31/05/2021 - 01:15:23, [INFO], The user started the game level 1.
+31/05/2021 - 01:15:24, [INFO], The user returned to the game menu.
+31/05/2021 - 01:15:27, [INFO], The user logged out.
+31/05/2021 - 01:15:27, [INFO], A user closed the game.
