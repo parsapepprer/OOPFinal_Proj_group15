@@ -1,17 +1,27 @@
-package model;
+package model.animal;
 
 import java.util.Random;
 
-public abstract class WildAnimal { // lion  bear tiger
-    protected int x, y;
+public abstract class Animal {
     protected Random rand;
-    protected int cageTime;
+    protected int number;
+    protected int x, y;
+    protected int price;
 
-    public WildAnimal(int cageTime) {
+    public Animal(int price, int number) {
+        this.number = number;
         this.rand = new Random();
         this.x = rand.nextInt(6);
         this.y = rand.nextInt(6);
-        this.cageTime = cageTime;
+        this.price = price;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public void moveRandom() {
@@ -43,7 +53,5 @@ public abstract class WildAnimal { // lion  bear tiger
             }
 
         }
-    }
-
-//    public void cage(){ }
+    }//
 }

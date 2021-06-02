@@ -1,0 +1,37 @@
+[
+  {
+    "level": 1,
+    "numberOfInitialCoins": 100,
+    "domesticAnimals": [
+      "Buffalo1",
+      "Buffalo2",
+      "Chicken1",
+      "Chicken2",
+      "Chicken3",
+      "Chicken4"
+    ],
+    "protectiveAnimals": [
+      "Hound1"
+    ],
+    "collectorAnimals": [
+      "Cat1"
+    ],
+    "factories": [
+      "PackingWorkshop",
+      "Mill"
+    ],
+    "wildAnimalsTime": {
+      "Lion1": 0,
+      "Lion2": 10,
+      "Bear1": 20,
+      "Bear2": 30
+    },
+    "tasks": {
+      "Coin": 100,
+      "Egg": 6,
+      "Chicken": 3
+    },
+    "maxPrizeTime": 50,
+    "prize": 70
+  }
+]

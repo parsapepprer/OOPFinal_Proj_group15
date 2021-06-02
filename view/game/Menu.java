@@ -2,7 +2,6 @@ package view.game;
 
 import controller.GameManager;
 import controller.Logger;
-import controller.MissionManager;
 import model.User;
 import view.AbstractMenu;
 
@@ -47,7 +46,7 @@ public class Menu extends AbstractMenu {
                             } else {
                                 System.out.println();
                                 Logger.log("info", "The user started the game level " + level + ".");
-                                new Start(gameManager).run();
+                                new Start(gameManager, level).run();
                             }
 
                         } catch (Exception ignored) {

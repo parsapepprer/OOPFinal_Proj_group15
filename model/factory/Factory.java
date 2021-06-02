@@ -1,14 +1,13 @@
-package model;
+package model.factory;
 
-public abstract class Factory<T> {
+public abstract class Factory<K,V> {
     protected int price;
     protected int produceTime;
-    String product;
+    protected String product;
 
-    public Factory(int price, int produceTime, String product) {
+    public Factory(int price, int produceTime) {
         this.price = price;
         this.produceTime = produceTime;
-        this.product = product;
     }
 
     public void produce(){

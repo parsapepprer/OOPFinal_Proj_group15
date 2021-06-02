@@ -4,36 +4,28 @@ import controller.GameManager;
 import controller.Logger;
 import view.AbstractMenu;
 
+import java.util.regex.Matcher;
+
 public class Start extends AbstractMenu {
 
     private GameManager gameManager;
 
-    public Start(GameManager gameManager) {
+    public Start(GameManager gameManager, int level) {
         super();
         this.gameManager = gameManager;
+        this.gameManager.setGame(level);
+        Logger.log("info", "The game was set!");
     }
 
     @Override
     public void run() {
-        System.out.println("Start:");
-        System.out.println("1. Back");
+        String command;
+        Matcher matcher;
+        while (!Commands.EXIT.getMatcher(command = scanner.nextLine()).matches()) {
+            if ((matcher = Commands.ADD_PERSON.getMatcher(command)).matches()) {
 
-        while (true) {
-            try {
-                int nextMenuNum = Integer.parseInt(scanner.nextLine());
-                if (nextMenuNum == 1) {
-                    System.out.println();
-                    Logger.log("info", "The user returned to the game menu.");
-                    return;
-
-                } else {
-                    Logger.log("error", "An invalid number was entered.");
-                    System.out.println("Invalid number!");
-                }
-
-            } catch (Exception ignored) {
-                Logger.log("error", "An invalid number was entered.");
-                System.out.println("Invalid number!");
+            } else {
+                System.out.println("Illegal command!");
             }
         }
     }
