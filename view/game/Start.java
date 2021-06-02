@@ -2,18 +2,15 @@ package view.game;
 
 import controller.GameManager;
 import controller.Logger;
-import model.Mission;
 import view.AbstractMenu;
 
 public class Start extends AbstractMenu {
 
     private GameManager gameManager;
 
-    public Start(GameManager gameManager, Mission mission) {
+    public Start(GameManager gameManager) {
         super();
         this.gameManager = gameManager;
-        this.gameManager.setMission(mission);
-        Logger.log("info", "The mission was set.");
     }
 
     @Override

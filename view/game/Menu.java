@@ -9,12 +9,10 @@ import view.AbstractMenu;
 public class Menu extends AbstractMenu {
 
     private final GameManager gameManager;
-    private final MissionManager missionManager;
 
     public Menu(User user) {
         super();
         this.gameManager = new GameManager(user);
-        this.missionManager = new MissionManager();
     }
 
     @Override
@@ -49,8 +47,9 @@ public class Menu extends AbstractMenu {
                             } else {
                                 System.out.println();
                                 Logger.log("info", "The user started the game level " + level + ".");
-                                new Start(gameManager, missionManager.getMission(level)).run();
+                                new Start(gameManager).run();
                             }
+
                         } catch (Exception ignored) {
                             Logger.log("error", "The user entered a invalid level.");
                             System.out.println("The level is invalid!");

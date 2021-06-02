@@ -5,15 +5,26 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import model.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MissionManager {
 
-    public static int numberOfLevels = 0;
-    private HashMap<Integer, Mission> missions;
+    public static int number_of_levels = 0;
+    private final HashMap<Integer, Mission> missions;
 
-    public MissionManager() {
-        load();
+    private MissionManager(HashMap<Integer, Mission> missions) {
+        this.missions = missions;
+        number_of_levels = missions.size();
+    }
+
+    private static MissionManager missionManagerInstance;
+
+    public static MissionManager getInstance() {
+        if (missionManagerInstance == null) {
+            load();
+        }
+        return missionManagerInstance;
     }
 
     private void processMission(int level, Mission mission) {
@@ -23,7 +34,7 @@ public class MissionManager {
             save();
         } else if (level == missions.size() + 1) {
             missions.put(level, mission);
-            numberOfLevels++;
+            number_of_levels++;
             Logger.log("admin", "a new level (" + level + ") was added to levels!");
             save();
         }
@@ -33,30 +44,29 @@ public class MissionManager {
         return missions.get(level);
     }
 
-    private void load() {
+    private static void load() {
         String missionsText = FileManager.read("missions.json");
         if (!missionsText.isEmpty()) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            missions = gson.fromJson(missionsText, new TypeToken<HashMap<Integer, Mission>>() {
+            HashMap<Integer, Mission> missions = gson.fromJson(missionsText, new TypeToken<HashMap<Integer, Mission>>() {
             }.getType());
+            missionManagerInstance = new MissionManager(missions);
         } else {
-            missions = new HashMap<>();
+            missionManagerInstance = new MissionManager(new HashMap<>());
         }
-        numberOfLevels = missions.size();
     }
 
     private void save() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String missionsText = gson.toJson(missions);
+        String missionsText = gson.toJson(this);
         FileManager.write("missions.json", missionsText);
     }
 
     public static void main(String[] args) {
 
-        MissionManager missionManager = new MissionManager();
-
         int level;
         int numberOfInitialCoins;
+        HashMap<String, Integer> domesticAnimalsTime = new HashMap<>();
         HashMap<String, Integer> wildAnimalsTime = new HashMap<>();
         HashMap<String, Integer> tasks = new HashMap<>();
         int maxPrizeTime;
@@ -75,7 +85,7 @@ public class MissionManager {
         prize = 70;
         // -----------------------------------------------
 
-        Mission mission = new Mission(numberOfInitialCoins, wildAnimalsTime, tasks, maxPrizeTime, prize);
-        missionManager.processMission(level, mission);
+        Mission mission = new Mission(numberOfInitialCoins, domesticAnimalsTime, wildAnimalsTime, tasks, maxPrizeTime, prize);
+        MissionManager.getInstance().processMission(level, mission);
     }
 }

@@ -14,7 +14,7 @@ public class GameManager {
     }
 
     public boolean checkInvalidLevel(int level) {
-        return level <= 0 || level > MissionManager.numberOfLevels;
+        return level <= 0 || level > MissionManager.number_of_levels;
     }
 
     public boolean checkLockedLevel(int level) {

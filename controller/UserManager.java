@@ -10,21 +10,21 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Authenticator {
+public class UserManager {
 
     private final ArrayList<User> users;
 
-    private Authenticator(ArrayList<User> users) {
+    private UserManager(ArrayList<User> users) {
         this.users = users;
     }
 
-    private static Authenticator authenticatorInstance;
+    private static UserManager userManagerInstance;
 
-    public static Authenticator getInstance() {
-        if (authenticatorInstance == null) {
+    public static UserManager getInstance() {
+        if (userManagerInstance == null) {
             load();
         }
-        return authenticatorInstance;
+        return userManagerInstance;
     }
 
     public User findUser(String username) {
@@ -94,9 +94,9 @@ public class Authenticator {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             ArrayList<User> people = gson.fromJson(usersText, new TypeToken<ArrayList<User>>() {
             }.getType());
-            authenticatorInstance = new Authenticator(people);
+            userManagerInstance = new UserManager(people);
         } else {
-            authenticatorInstance = new Authenticator(new ArrayList<>());
+            userManagerInstance = new UserManager(new ArrayList<>());
         }
     }
 

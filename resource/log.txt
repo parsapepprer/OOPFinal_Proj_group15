@@ -52,3 +52,28 @@
 31/05/2021 - 12:49:53, [INFO], User MHZ
 31/05/2021 - 12:51:13, [ERROR], An invalid number was entered.
 31/05/2021 - 12:51:16, [INFO], A user closed the game.
+31/05/2021 - 13:00:33, [INFO], A user wanted to log in.
+31/05/2021 - 13:00:34, [INFO], User MHZ
+31/05/2021 - 13:00:35, [INFO], MHZ entered the game menu.
+31/05/2021 - 13:00:37, [INFO], The user wanted to start the game.
+31/05/2021 - 13:00:40, [INFO], The user entered the level.
+31/05/2021 - 13:00:40, [ERROR], The user entered a locked level.
+31/05/2021 - 13:00:42, [INFO], The user wanted to start the game.
+31/05/2021 - 13:00:44, [INFO], The user entered the level.
+31/05/2021 - 13:00:44, [INFO], The user started the game level 1.
+31/05/2021 - 13:00:44, [INFO], The mission was set.
+31/05/2021 - 13:00:45, [INFO], The user returned to the game menu.
+31/05/2021 - 13:00:46, [INFO], The user closed the game.
+31/05/2021 - 13:04:09, [INFO], A user wanted to log in.
+31/05/2021 - 13:04:11, [INFO], User MHZ
+31/05/2021 - 13:04:13, [INFO], MHZ entered the game menu.
+31/05/2021 - 13:04:14, [INFO], The user wanted to start the game.
+31/05/2021 - 13:04:16, [INFO], The user entered the level.
+31/05/2021 - 13:04:16, [ERROR], The user entered a locked level.
+31/05/2021 - 13:04:17, [INFO], The user wanted to start the game.
+31/05/2021 - 13:04:17, [INFO], The user entered the level.
+31/05/2021 - 13:04:18, [INFO], The user started the game level 1.
+31/05/2021 - 13:04:18, [INFO], The mission was set.
+31/05/2021 - 13:04:19, [INFO], The user returned to the game menu.
+31/05/2021 - 13:04:20, [INFO], The user logged out.
+31/05/2021 - 13:04:21, [INFO], A user closed the game.

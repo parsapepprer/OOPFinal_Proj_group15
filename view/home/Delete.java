@@ -1,6 +1,6 @@
 package view.home;
 
-import controller.Authenticator;
+import controller.UserManager;
 import controller.Logger;
 import view.AbstractMenu;
 
@@ -11,11 +11,11 @@ public class Delete extends AbstractMenu {
 
     @Override
     public void run() {
-        Authenticator authenticator = Authenticator.getInstance();
+        UserManager userManager = UserManager.getInstance();
         String username;
 
         System.out.println("Enter your username:");
-        if (!authenticator.checkUserExists((username = scanner.nextLine()))) {
+        if (!userManager.checkUserExists((username = scanner.nextLine()))) {
             Logger.log("error", "The user entered a username not existing.");
             System.out.println("The username doesn't exist!");
             System.out.println();
@@ -24,7 +24,7 @@ public class Delete extends AbstractMenu {
 
         Logger.log("info", "User " + username);
         System.out.println("Enter your password:");
-        if (authenticator.checkIncorrectPassword(username, scanner.nextLine())) {
+        if (userManager.checkIncorrectPassword(username, scanner.nextLine())) {
             Logger.log("error", "The user entered an incorrect password.");
             System.out.println("Your password is incorrect!");
             System.out.println();
@@ -33,6 +33,6 @@ public class Delete extends AbstractMenu {
 
         System.out.println();
         Logger.log("info", username + " deleted his/her account.");
-        authenticator.removeUser(username);
+        userManager.removeUser(username);
     }
 }
