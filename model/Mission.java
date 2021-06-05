@@ -1,21 +1,27 @@
 package model;
 
+import model.animal.collector.CollectorList;
+import model.animal.domestic.DomesticList;
+import model.animal.protective.ProtectiveList;
+import model.animal.wild.WildList;
+import model.factory.FactoryList;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class Mission {
     private int level;
     private int numberOfInitialCoins;
-    private HashSet<String> domesticAnimals;
-    private HashSet<String> protectiveAnimals;
-    private HashSet<String> collectorAnimals;
-    private HashSet<String> factories;
-    private HashMap<String, Integer> wildAnimalsTime;
+    private HashMap<DomesticList, Integer> domesticAnimals;
+    private HashMap<ProtectiveList, Integer> protectiveAnimals;
+    private HashMap<CollectorList, Integer> collectorAnimals;
+    private HashSet<FactoryList> factories;
+    private HashMap<WildList, Integer[]> wildAnimalsTime;
     private HashMap<String, Integer> tasks;
     private int maxPrizeTime;
     private int prize;
 
-    public Mission(int level, int numberOfInitialCoins, HashSet<String> domesticAnimals, HashSet<String> protectiveAnimals, HashSet<String> collectorAnimals, HashSet<String> factories, HashMap<String, Integer> wildAnimalsTime, HashMap<String, Integer> tasks, int maxPrizeTime, int prize) {
+    public Mission(int level, int numberOfInitialCoins, HashMap<DomesticList, Integer> domesticAnimals, HashMap<ProtectiveList, Integer> protectiveAnimals, HashMap<CollectorList, Integer> collectorAnimals, HashSet<FactoryList> factories, HashMap<WildList, Integer[]> wildAnimalsTime, HashMap<String, Integer> tasks, int maxPrizeTime, int prize) {
         this.level = level;
         this.numberOfInitialCoins = numberOfInitialCoins;
         this.domesticAnimals = domesticAnimals;
@@ -36,23 +42,23 @@ public class Mission {
         return numberOfInitialCoins;
     }
 
-    public HashSet<String> getDomesticAnimals() {
+    public HashMap<DomesticList, Integer> getDomesticAnimals() {
         return domesticAnimals;
     }
 
-    public HashSet<String> getProtectiveAnimals() {
+    public HashMap<ProtectiveList, Integer> getProtectiveAnimals() {
         return protectiveAnimals;
     }
 
-    public HashSet<String> getCollectorAnimals() {
+    public HashMap<CollectorList, Integer> getCollectorAnimals() {
         return collectorAnimals;
     }
 
-    public HashSet<String> getFactories() {
+    public HashSet<FactoryList> getFactories() {
         return factories;
     }
 
-    public HashMap<String, Integer> getWildAnimalsTime() {
+    public HashMap<WildList, Integer[]> getWildAnimalsTime() {
         return wildAnimalsTime;
     }
 

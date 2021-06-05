@@ -24,4 +24,9 @@ public class User {
     public int getLastUnlockedLevel() {
         return lastUnlockedLevel;
     }
+
+    public void updateUser(int level, int coin) {
+        this.lastUnlockedLevel = level;
+        this.collectedCoins += coin;
+    }
 }

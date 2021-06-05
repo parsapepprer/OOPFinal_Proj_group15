@@ -27,6 +27,11 @@ public class UserManager {
         return userManagerInstance;
     }
 
+    public void updateUser(User user, int level, int coin) {
+        user.updateUser(level, coin);
+        save();
+    }
+
     public User findUser(String username) {
         for (User user : users) {
             if (user.getUsername().equals(username)) return user;

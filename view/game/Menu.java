@@ -49,7 +49,8 @@ public class Menu extends AbstractMenu {
                                 new Start(gameManager, level).run();
                             }
 
-                        } catch (Exception ignored) {
+                        } catch (Exception e) {
+                            e.printStackTrace();
                             Logger.log("error", "The user entered a invalid level.");
                             System.out.println("The level is invalid!");
                             System.out.println();

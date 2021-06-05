@@ -4,6 +4,6 @@ public class Hound extends Protective {
     private static int NUMBER_OF_HOUNDS = 0;
 
     public Hound() {
-        super(100, ++NUMBER_OF_HOUNDS);
+        super(100, "Hound" + ++NUMBER_OF_HOUNDS);
     }
 }

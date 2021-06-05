@@ -1,10 +1,7 @@
 package model.factory;
 
-import model.good.Bread;
-import model.good.Flour;
-
-public class Bakery extends Factory<Flour, Bread> {
+public class Bakery extends Factory {
     public Bakery() {
-        super(250, 5);
+        super(250, 5, "Flour", "Bread");
     }
 }
