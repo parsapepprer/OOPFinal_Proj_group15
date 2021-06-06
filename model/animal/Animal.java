@@ -1,13 +1,11 @@
 package model.animal;
 
 import model.Game;
-import model.animal.protective.Protective;
 
 import java.util.Random;
 
 public abstract class Animal {
     protected Random rand;
-    protected String name;
     protected int i, j;
     protected int preI, preJ;
     protected int price;
@@ -15,7 +13,7 @@ public abstract class Animal {
     protected int lifetime;
     protected int step;
 
-    public Animal(int price, String name, int lifetime, int space, int step) {
+    public Animal(int price, int lifetime, int space, int step) {
         this.rand = new Random();
         this.i = rand.nextInt(Game.SIZE);
         this.j = rand.nextInt(Game.SIZE);
@@ -24,7 +22,6 @@ public abstract class Animal {
         this.price = price;
         this.lifetime = lifetime;
         this.space = space;
-        this.name = name;
         this.step = step;
     }
 
@@ -44,10 +41,6 @@ public abstract class Animal {
         return preJ;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -58,7 +51,7 @@ public abstract class Animal {
 
     @Override
     public String toString() {
-        return name + " [" + (i + 1) + " " + (j + 1) + "]";
+        return this.getClass().getSimpleName() + " [" + (i + 1) + " " + (j + 1) + "]";
     }
 
     public void move(boolean vertical, boolean direction) {

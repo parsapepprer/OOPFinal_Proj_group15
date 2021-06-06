@@ -3,7 +3,7 @@ package model.factory;
 import java.util.regex.Pattern;
 
 public enum FactoryList {
-    BAKERY("model.factory.Bakery", "Bakery", "^(?i)\\s*bread\\s*$", 250),
+    BAKERY("model.factory.Bakery", "Bakery", "^(?i)\\s*bakery\\s*$", 250),
     ICE_CREAM_MAKER("model.factory.IceCreamMaker", "IceCreamMaker", "^(?i)\\s*ice\\s*cream\\s*maker\\s*$", 550),
     MILL("model.factory.Mill", "Mill", "^(?i)\\s*mill\\s*$", 150),
     MILK_PACKER("model.factory.MilkPacker", "MilkPacker", "^(?i)\\s*milk\\s*packer\\s*$", 400),

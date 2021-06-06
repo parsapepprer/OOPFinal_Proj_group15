@@ -3,7 +3,9 @@ package model.animal.wild;
 import model.Game;
 import model.animal.Animal;
 import model.animal.domestic.Domestic;
+import model.good.Good;
 
+import java.util.Collections;
 import java.util.HashSet;
 
 public abstract class Wild extends Animal {
@@ -11,8 +13,8 @@ public abstract class Wild extends Animal {
     protected int cageNeeded;
     protected int cageRemaining;
 
-    public Wild(int cageNeeded, int price, String name, int step) {
-        super(price, name, 5, 15, step);
+    public Wild(int cageNeeded, int price, int step) {
+        super(price, 5, 15, step);
         this.space = 15;
         this.cageNeeded = cageNeeded;
         this.cageRemaining = cageNeeded;
@@ -47,17 +49,18 @@ public abstract class Wild extends Animal {
 
     public void work() {
         if (isInCage()) {
-            if (lifetime > 0) lifetime--;
-            if (lifetime == 0) {
-                Game.getInstance().getWildAnimals(i, j).remove(this);
+            if (lifetime > 0) {
+                lifetime--;
+                if (lifetime == 0) {
+                    Game.getInstance().getWildAnimals(i, j).remove(this);
+                }
             }
         } else {
             if (cageRemaining < cageNeeded) cageRemaining++;
 
-            Game.getInstance().getDomesticAnimals(i, j).clear();
             Game.getInstance().getGoods(i, j).clear();
 
-            HashSet<Domestic> removedDomestic = new HashSet<>();
+            HashSet<Domestic> removedDomestic = new HashSet<>(Game.getInstance().getDomesticAnimals(i, j));
             if (preI != -1 && preJ != -1) {
                 HashSet<Domestic>[] domestics = new HashSet[Game.SIZE];
 
@@ -75,11 +78,7 @@ public abstract class Wild extends Animal {
 
                 for (int k = 0; k < Game.SIZE; k++) {
                     for (Domestic domestic : domestics[k]) {
-                        if ((domestic.getPreI() == -1 || domestic.getPreJ() == -1)) {
-                            if (domestic.getI() == i && domestic.getJ() == j) {
-                                removedDomestic.add(domestic);
-                            }
-                        } else if (domestic.intersection(this)) {
+                        if (domestic.getPreI() != -1 && domestic.getPreJ() != -1 && domestic.intersection(this)) {
                             removedDomestic.add(domestic);
                         }
                     }
@@ -95,6 +94,6 @@ public abstract class Wild extends Animal {
 
     @Override
     public String toString() {
-        return name + " " + cageRemaining + " " + "[" + (i + 1) + " " + (j + 1) + "]";
+        return (isInCage() ? "* " : "") + this.getClass().getSimpleName() + " " + (isInCage() ? lifetime : cageRemaining) + " " + "[" + (i + 1) + " " + (j + 1) + "]";
     }
 }

@@ -30,6 +30,24 @@ public class GameManager {
         this.user = user;
     }
 
+    public ResultType finish() {
+        ResultType result = ResultType.FINISH;
+        StringBuilder sb = new StringBuilder();
+        sb.append("You completed the level ").append(game.getMission().getLevel()).append("!\n");
+        sb.append("Time = ").append(game.getTime()).append("\n");
+        if (game.getTime() <= game.getMission().getMaxPrizeTime()) {
+            sb.append("Coin = ").append(game.getCoin() - game.getMission().getPrize()).append("\n");
+            sb.append("Prize for finishing in time: ").append(game.getMission().getPrize()).append(" Coins\n");
+        } else {
+            sb.append("Coin = ").append(game.getCoin()).append("\n");
+            sb.append("Prize for finishing in time: 0 Coins\n");
+        }
+        sb.append("You collected ").append(game.getCoin()).append(" Coins in this level!\n");
+        sb.append("Enter MENU to go to the game menu!\n");
+        result.setValue(sb.toString());
+        return result;
+    }
+
     public boolean checkInvalidLevel(int level) {
         return level <= 0 || level > MissionManager.getInstance().getNumberOfLevels();
     }
@@ -41,6 +59,7 @@ public class GameManager {
     public void setGame(int level) {
         Game.initiateGame(MissionManager.getInstance().getMission(level), user);
         this.game = Game.getInstance();
+
     }
 
     public ResultType well() {
@@ -66,43 +85,41 @@ public class GameManager {
             return ResultType.INVALID_NUMBER;
         }
 
-        if (game.getWildAnimals(i - 1, j - 1).isEmpty() && game.getGoods(i - 1, j - 1).isEmpty()) return ResultType.NOT_EXISTED;
-
+        boolean exist = false;
         for (Wild wild : game.getWildAnimals(i - 1, j - 1)) {
+            if (wild.isInCage()) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist && game.getGoods(i - 1, j - 1).isEmpty())
+            return ResultType.NOT_EXISTED;
+
+        boolean enough = true;
+        for (Wild wild : new HashSet<>(game.getWildAnimals(i - 1, j - 1))) {
             if (wild.isInCage() && game.getWarehouse().addWild(new HashSet<>(Collections.singletonList(wild)))) {
                 game.getWildAnimals(i - 1, j - 1).remove(wild);
                 game.updateTask(wild.getClass().getSimpleName(), true);
-            }
+            } else enough = false;
         }
 
-        for (Good good : game.getGoods(i - 1, j - 1)) {
+        for (Good good : new HashSet<>(game.getGoods(i - 1, j - 1))) {
             if (game.getWarehouse().addGood(new HashSet<>(Collections.singletonList(good)))) {
                 game.getGoods(i - 1, j - 1).remove(good);
                 game.updateTask(good.getClass().getSimpleName(), true);
-            }
+            } else enough = false;
         }
 
         if (game.checkTaskFinished()) {
-            ResultType result = ResultType.FINISH;
-            StringBuilder sb = new StringBuilder();
-            sb.append("You completed the level ").append(game.getMission().getLevel()).append("!\n");
-            sb.append("Time = ").append(game.getTime()).append("\n");
-            if (game.getTime() <= game.getMission().getMaxPrizeTime()) {
-                sb.append("Coin = ").append(game.getCoin() - game.getMission().getPrize()).append("\n");
-                sb.append("Prize for finishing in time: ").append(game.getMission().getPrize()).append(" Coins\n");
-            } else {
-                sb.append("Coin = ").append(game.getCoin());
-                sb.append("Prize for finishing in time: 0 Coins\n");
-            }
-            sb.append("You collected ").append(game.getCoin()).append(" Coins in this level!");
-            result.setValue(sb.toString());
-            return result;
+            return finish();
         }
 
-        return ResultType.SUCCESS;
+        if (enough) return ResultType.SUCCESS;
+        return ResultType.NOT_ENOUGH;
     }
 
     public ResultType buy(String name) {
+        boolean exist = false;
         DomesticList domesticList = DomesticList.getDomestic(name);
         if (domesticList != null) {
             try {
@@ -110,7 +127,7 @@ public class GameManager {
                     return ResultType.NOT_ENOUGH;
                 } else {
                     game.addDomesticAnimal((Domestic) Class.forName(domesticList.getPackageName()).newInstance());
-                    return ResultType.SUCCESS;
+                    exist = true;
                 }
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
             }
@@ -123,7 +140,7 @@ public class GameManager {
                     return ResultType.NOT_ENOUGH;
                 } else {
                     game.addProtectiveAnimal((Protective) Class.forName(protectiveList.getPackageName()).newInstance());
-                    return ResultType.SUCCESS;
+                    exist = true;
                 }
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
             }
@@ -136,29 +153,17 @@ public class GameManager {
                     return ResultType.NOT_ENOUGH;
                 } else {
                     game.addCollectorAnimal((Collector) Class.forName(collectorList.getPackageName()).newInstance());
-                    return ResultType.SUCCESS;
+                    exist = true;
                 }
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
             }
         }
 
         if (game.checkTaskFinished()) {
-            ResultType result = ResultType.FINISH;
-            StringBuilder sb = new StringBuilder();
-            sb.append("You completed the level ").append(game.getMission().getLevel()).append("!\n");
-            sb.append("Time = ").append(game.getTime()).append("\n");
-            if (game.getTime() <= game.getMission().getMaxPrizeTime()) {
-                sb.append("Coin = ").append(game.getCoin() - game.getMission().getPrize()).append("\n");
-                sb.append("Prize for finishing in time: ").append(game.getMission().getPrize()).append(" Coins\n");
-            } else {
-                sb.append("Coin = ").append(game.getCoin());
-                sb.append("Prize for finishing in time: 0 Coins\n");
-            }
-            sb.append("You collected ").append(game.getCoin()).append(" Coins in this level!");
-            result.setValue(sb.toString());
-            return result;
+            finish();
         }
 
+        if (exist) return ResultType.SUCCESS;
         return ResultType.NOT_EXISTED;
     }
 
@@ -200,7 +205,14 @@ public class GameManager {
             return ResultType.INVALID_NUMBER;
         }
 
-        if (game.getWildAnimals(i - 1, j - 1).isEmpty()) return ResultType.NOT_EXISTED;
+        boolean exist = false;
+        for (Wild wild : game.getWildAnimals(i - 1, j - 1)) {
+            if (!wild.isInCage()) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) return ResultType.NOT_EXISTED;
 
         for (Wild wild : game.getWildAnimals(i - 1, j - 1)) {
             if (!wild.isInCage()) {
@@ -308,6 +320,7 @@ public class GameManager {
     public String inquiry() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append("Time = ").append(game.getTime()).append("\n");
+        sb.append("\n").append("Coin = ").append(game.getCoin()).append("\n");
         sb.append("\n").append("Grass:\n");
         int[][] grass = game.getGrass();
         for (int i = 0; i < Game.SIZE; i++) {
@@ -317,54 +330,78 @@ public class GameManager {
             }
             sb.append("\n");
         }
-        sb.append("\n").append("Domestics:\n");
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Animal animal : game.getDomesticAnimals(i, j)) {
-                    sb.append("\t").append(animal.toString()).append("\n");
+        sb.append("\n").append("Well L").append(game.getWaterLevel()).append(":\n");
+        if (game.wellIsWorking())
+            sb.append("\t").append("Remaining Time to Fill Well = ").append(game.getFillRemainingTime()).append("\n");
+        else
+            sb.append("\t").append("Water = ").append(game.getWater()).append("\n");
+
+        if (!game.getAllDomestics().isEmpty()) {
+            sb.append("\n").append("Domestics:\n");
+            for (int i = 0; i < Game.SIZE; i++) {
+                for (int j = 0; j < Game.SIZE; j++) {
+                    for (Animal animal : game.getDomesticAnimals(i, j)) {
+                        sb.append("\t").append(animal.toString()).append("\n");
+                    }
                 }
             }
         }
-        sb.append("\n").append("Wilds:\n");
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Animal animal : game.getWildAnimals(i, j)) {
-                    sb.append("\t").append(animal.toString()).append("\n");
+        if (!game.getAllWilds().isEmpty()) {
+            sb.append("\n").append("Wilds:\n");
+            for (int i = 0; i < Game.SIZE; i++) {
+                for (int j = 0; j < Game.SIZE; j++) {
+                    for (Animal animal : game.getWildAnimals(i, j)) {
+                        sb.append("\t").append(animal.toString()).append("\n");
+                    }
                 }
             }
         }
-        sb.append("\n").append("Protectives:\n");
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Animal animal : game.getProtectiveAnimals(i, j)) {
-                    sb.append("\t").append(animal.toString()).append("\n");
+        if (!game.getAllProtectives().isEmpty()) {
+            sb.append("\n").append("Protectives:\n");
+            for (int i = 0; i < Game.SIZE; i++) {
+                for (int j = 0; j < Game.SIZE; j++) {
+                    for (Animal animal : game.getProtectiveAnimals(i, j)) {
+                        sb.append("\t").append(animal.toString()).append("\n");
+                    }
                 }
             }
         }
-        sb.append("\n").append("Collectors:\n");
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Animal animal : game.getCollectorAnimals(i, j)) {
-                    sb.append("\t").append(animal.toString()).append("\n");
+        if (!game.getAllCollectors().isEmpty()) {
+            sb.append("\n").append("Collectors:\n");
+            for (int i = 0; i < Game.SIZE; i++) {
+                for (int j = 0; j < Game.SIZE; j++) {
+                    for (Animal animal : game.getCollectorAnimals(i, j)) {
+                        sb.append("\t").append(animal.toString()).append("\n");
+                    }
                 }
             }
         }
-        sb.append("\n").append("Goods:\n");
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Good good : game.getGoods(i, j)) {
-                    sb.append("\t").append(good.toString()).append("\n");
+        if (!game.getAllGoods().isEmpty()) {
+            sb.append("\n").append("Goods:\n");
+            for (int i = 0; i < Game.SIZE; i++) {
+                for (int j = 0; j < Game.SIZE; j++) {
+                    for (Good good : game.getGoods(i, j)) {
+                        sb.append("\t").append(good.toString()).append("\n");
+                    }
                 }
+            }
+        }
+        if (!game.getFactories().isEmpty()) {
+            sb.append("\n").append("Factories:\n");
+            for (Factory factory : game.getFactories()) {
+                sb.append("\t").append(factory.toString()).append("\n");
             }
         }
         sb.append("\n").append("Tasks:\n");
         for (Map.Entry<String, Integer[]> task : game.getTasks().entrySet()) {
-            sb.append("\t").append(task.getKey()).append(": ").append(task.getValue()[1]).append("/").append(task.getValue()[0]).append("\n");
+            sb.append("\t").append((task.getValue()[0].equals(task.getValue()[1]) ? "+ " : "- ")).append(task.getKey()).append(": ").append(task.getValue()[1]).append("/").append(task.getValue()[0]).append("\n");
         }
 
-        sb.append(game.getWarehouse().toString());
+        if (!game.getWarehouse().isEmpty())
+            sb.append(game.getWarehouse().toString());
 
-        sb.append(game.getTruck().toString());
+        if (game.getTruck().isInTruck() || game.getTruck().isCheckShow())
+            sb.append(game.getTruck().toString());
 
         sb.delete(sb.length() - 1, sb.length());
         return sb.toString();
@@ -375,10 +412,12 @@ public class GameManager {
         if (factoryList != null) {
             for (Factory factory : game.getFactories()) {
                 if (factory.getClass().getSimpleName().equalsIgnoreCase(factoryList.getClassName())) {
-                    if (factory.getPrice() > game.getCoin()) {
-                        return ResultType.INVALID_NUMBER;
+                    if (factory.getUpgradePrice() > game.getCoin()) {
+                        return ResultType.NOT_ENOUGH;
+                    } else if (factory.checkFinalLevel()) {
+                        return ResultType.BAD_CONDITION;
                     } else {
-                        game.decreaseCoin(factory.getPrice());
+                        game.decreaseCoin(factory.getUpgradePrice());
                         factory.upgrade();
                         ResultType result = ResultType.SUCCESS;
                         result.setValue(factory.getClass().getSimpleName());
@@ -391,7 +430,9 @@ public class GameManager {
 
         if (name.matches("^(?i)\\s*truck\\s*$")) {
             if (game.getTruck().getUpgradePrice() > game.getCoin()) {
-                return ResultType.INVALID_NUMBER;
+                return ResultType.NOT_ENOUGH;
+            } else if (game.getTruck().checkFinalLevel()) {
+                return ResultType.BAD_CONDITION;
             } else {
                 game.decreaseCoin(game.getTruck().getUpgradePrice());
                 game.getTruck().upgrade();
@@ -404,6 +445,8 @@ public class GameManager {
         if (name.matches("^(?i)\\s*ware\\s*house\\s*$")) {
             if (game.getWarehouse().getUpgradePrice() > game.getCoin()) {
                 return ResultType.NOT_ENOUGH;
+            } else if (game.getWarehouse().checkFinalLevel()) {
+                return ResultType.BAD_CONDITION;
             } else {
                 game.decreaseCoin(game.getWarehouse().getUpgradePrice());
                 game.getWarehouse().upgrade();
@@ -416,6 +459,8 @@ public class GameManager {
         if (name.matches("^(?i)\\s*well\\s*$")) {
             if (game.getUpgradePrice() > game.getCoin()) {
                 return ResultType.NOT_ENOUGH;
+            } else if (game.checkFinalLevel()) {
+                return ResultType.BAD_CONDITION;
             } else {
                 game.decreaseCoin(game.getUpgradePrice());
                 game.upgradeWell();
@@ -433,20 +478,7 @@ public class GameManager {
         for (int i = 0; i < n; i++) {
             update();
             if (game.checkTaskFinished()) {
-                ResultType result = ResultType.FINISH;
-                StringBuilder sb = new StringBuilder();
-                sb.append("You completed the level ").append(game.getMission().getLevel()).append("!\n");
-                sb.append("Time = ").append(game.getTime()).append("\n");
-                if (game.getTime() <= game.getMission().getMaxPrizeTime()) {
-                    sb.append("Coin = ").append(game.getCoin() - game.getMission().getPrize()).append("\n");
-                    sb.append("Prize for finishing in time: ").append(game.getMission().getPrize()).append(" Coins\n");
-                } else {
-                    sb.append("Coin = ").append(game.getCoin());
-                    sb.append("Prize for finishing in time: 0 Coins\n");
-                }
-                sb.append("You collected ").append(game.getCoin()).append(" Coins in this level!");
-                result.setValue(sb.toString());
-                return result;
+                finish();
             }
         }
         ResultType result = ResultType.SUCCESS;
@@ -458,52 +490,28 @@ public class GameManager {
         game.increaseTime();
         game.updateWell();
         game.getTruck().update();
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Domestic domestic : game.getDomesticAnimals(i, j)) {
-                    domestic.move();
-                }
-            }
+        for (Domestic domestic : game.getAllDomestics()) {
+            domestic.move();
         }
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Wild wild : game.getWildAnimals(i, j)) {
-                    wild.move();
-                }
-            }
+        for (Wild wild : game.getAllWilds()) {
+            wild.move();
         }
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Protective protective : game.getProtectiveAnimals(i, j)) {
-                    protective.move();
-                }
-            }
+        for (Protective protective : game.getAllProtectives()) {
+            protective.move();
         }
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Collector collector : game.getCollectorAnimals(i, j)) {
-                    collector.move();
-                }
-            }
+        for (Collector collector : game.getAllCollectors()) {
+            collector.move();
         }
         game.loadWilds();
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Protective protective : game.getProtectiveAnimals(i, j)) {
-                    protective.work();
-                }
-            }
+        for (Protective protective : game.getAllProtectives()) {
+            protective.work();
         }
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Wild wild : game.getWildAnimals(i, j)) {
-                    wild.work();
-                }
-            }
+        for (Wild wild : game.getAllWilds()) {
+            wild.work();
         }
         ArrayList<Domestic> domestics = new ArrayList<>();
         int[][] grass = game.getGrass();
-        int number = 0;
+        int number;
         for (int i = 0; i < Game.SIZE; i++) {
             for (int j = 0; j < Game.SIZE; j++) {
                 domestics.clear();
@@ -532,29 +540,17 @@ public class GameManager {
                 }
             }
         }
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Domestic domestic : game.getDomesticAnimals(i, j)) {
-                    domestic.work();
-                }
-            }
+        for (Domestic domestic : game.getAllDomestics()) {
+            domestic.work();
         }
         for (Factory factory : game.getFactories()) {
             factory.update();
         }
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Collector collector : game.getCollectorAnimals(i, j)) {
-                    collector.work();
-                }
-            }
+        for (Collector collector : game.getAllCollectors()) {
+            collector.work();
         }
-        for (int i = 0; i < Game.SIZE; i++) {
-            for (int j = 0; j < Game.SIZE; j++) {
-                for (Good good : game.getGoods(i, j)) {
-                    good.update();
-                }
-            }
+        for (Good good : game.getAllGoods()) {
+            good.update();
         }
     }
 
@@ -562,7 +558,7 @@ public class GameManager {
         return game.isFinished();
     }
 
-    public boolean truckIsEmpty() {
-        return game.getTruck().truckIsEmpty();
+    public boolean truckInUse() {
+        return !game.getTruck().isEmpty() && !game.getTruck().isWorking();
     }
 }

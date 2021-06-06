@@ -9,8 +9,8 @@ import java.util.HashSet;
 
 public abstract class Collector extends Animal {
 
-    public Collector(int price, String name) {
-        super(price, name, Integer.MAX_VALUE, Integer.MAX_VALUE, 1);
+    public Collector(int price) {
+        super(price, Integer.MAX_VALUE, Integer.MAX_VALUE, 1);
     }
 
     public void move() {
@@ -40,7 +40,7 @@ public abstract class Collector extends Animal {
     }
 
     public void work() {
-        for (Good good : Game.getInstance().getGoods(i, j)) {
+        for (Good good : new HashSet<>(Game.getInstance().getGoods(i, j))) {
             if (Game.getInstance().getWarehouse().addGood(new HashSet<>(Collections.singletonList(good)))) {
                 Game.getInstance().getGoods(i, j).remove(good);
                 Game.getInstance().updateTask(good.getClass().getSimpleName(), true);

@@ -7,15 +7,13 @@ import java.util.Random;
 public abstract class Good {
     protected int space;
     protected int price;
-    protected String name;
     protected int lifetime;
     protected Random rand;
     protected int i, j;
 
-    public Good(int space, int lifetime, String name, int price) {
+    public Good(int space, int lifetime, int price) {
         this.space = space;
         this.lifetime = lifetime;
-        this.name = name;
         this.price = price;
         this.rand = new Random();
         this.i = rand.nextInt(Game.SIZE);
@@ -43,19 +41,17 @@ public abstract class Good {
         return j;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void update() {
-        if (lifetime > 0) lifetime--;
-        if (lifetime == 0) {
-            Game.getInstance().getGoods(i, j).remove(this);
+        if (lifetime > 0) {
+            lifetime--;
+            if (lifetime == 0) {
+                Game.getInstance().getGoods(i, j).remove(this);
+            }
         }
     }
 
     @Override
     public String toString() {
-        return name + " [" + i + " " + j + "]";
+        return (lifetime > 1 ? "" : "* ") + this.getClass().getSimpleName() + " " + lifetime + " [" + (i + 1) + " " + (j + 1) + "]";
     }
 }

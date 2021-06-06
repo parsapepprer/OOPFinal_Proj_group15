@@ -31,32 +31,34 @@ public class Game {
 
     public static final int SIZE = 6;
 
-    private Mission mission;
-    private User user;
+    private final Mission mission;
+    private final User user;
 
-    private HashMap<String, Integer[]> tasks;
+    private final HashMap<String, Integer[]> tasks;
     private boolean isFinished;
 
     private int time;
     private int coin;
 
-    private Warehouse warehouse;
-    private Truck truck;
+    private final Warehouse warehouse;
+    private final Truck truck;
 
-    private int[][] grass;
+    private final int[][] grass;
 
+    private int waterLevel;
+    private final int waterFinalLevel;
     private int bucketCapacity;
     private int water;
-    private int fillTime;
+    private final int fillTime;
     private int fillRemainingTime;
     private int fillPrice;
     private int upgradePrice;
 
-    private HashSet<Factory> factories;
-    private HashSet<Domestic>[][] domesticAnimals;
-    private HashSet<Wild>[][] wildAnimals;
-    private HashSet<Good>[][] goods;
-    private HashSet<Protective>[][] protectiveAnimals;
+    private final HashSet<Factory> factories;
+    private final HashSet<Domestic>[][] domesticAnimals;
+    private final HashSet<Wild>[][] wildAnimals;
+    private final HashSet<Good>[][] goods;
+    private final HashSet<Protective>[][] protectiveAnimals;
     private HashSet<Collector>[][] collectorAnimals;
 
     private Game(Mission mission, User user) {
@@ -81,6 +83,8 @@ public class Game {
         for (int[] ints : grass)
             Arrays.fill(ints, 0);
 
+        waterFinalLevel = 3;
+        waterLevel = 1;
         bucketCapacity = 5;
         water = bucketCapacity;
         fillTime = 3;
@@ -136,8 +140,6 @@ public class Game {
         loadWilds();
 
         goods = defineHashSet();
-
-        checkTaskFinished();
     }
 
     private HashSet[][] defineHashSet() {
@@ -151,9 +153,18 @@ public class Game {
     }
 
     public void upgradeWell() {
+        waterLevel++;
         bucketCapacity += 1;
         fillPrice -= 2;
-        upgradePrice += 50;
+        upgradePrice *= 1.2;
+    }
+
+    public boolean checkFinalLevel() {
+        return waterLevel >= waterFinalLevel;
+    }
+
+    public int getWaterLevel() {
+        return waterLevel;
     }
 
     public int getUpgradePrice() {
@@ -167,7 +178,6 @@ public class Game {
                     try {
                         Wild animal = (Wild) Class.forName(name.getPackageName()).newInstance();
                         wildAnimals[animal.getI()][animal.getJ()].add(animal);
-                        animal.work();
                     } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
                     }
                 }
@@ -230,6 +240,10 @@ public class Game {
 
     public boolean wellIsWorking() {
         return fillRemainingTime > 0;
+    }
+
+    public int getFillRemainingTime() {
+        return fillRemainingTime;
     }
 
     public void plant(int i, int j) {
@@ -370,9 +384,61 @@ public class Game {
     }
 
     public void updateWell() {
-        if (fillRemainingTime > 0) fillRemainingTime--;
-        if (fillRemainingTime == 0) {
-            water = bucketCapacity;
+        if (fillRemainingTime > 0) {
+            fillRemainingTime--;
+            if (fillRemainingTime == 0) {
+                water = bucketCapacity;
+            }
         }
+    }
+
+    public HashSet<Domestic> getAllDomestics() {
+        HashSet<Domestic> all = new HashSet<>();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                all.addAll(domesticAnimals[i][j]);
+            }
+        }
+        return all;
+    }
+
+    public HashSet<Wild> getAllWilds() {
+        HashSet<Wild> all = new HashSet<>();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                all.addAll(wildAnimals[i][j]);
+            }
+        }
+        return all;
+    }
+
+    public HashSet<Protective> getAllProtectives() {
+        HashSet<Protective> all = new HashSet<>();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                all.addAll(protectiveAnimals[i][j]);
+            }
+        }
+        return all;
+    }
+
+    public HashSet<Collector> getAllCollectors() {
+        HashSet<Collector> all = new HashSet<>();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                all.addAll(collectorAnimals[i][j]);
+            }
+        }
+        return all;
+    }
+
+    public HashSet<Good> getAllGoods() {
+        HashSet<Good> all = new HashSet<>();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                all.addAll(goods[i][j]);
+            }
+        }
+        return all;
     }
 }

@@ -29,4 +29,9 @@ public class User {
         this.lastUnlockedLevel = level;
         this.collectedCoins += coin;
     }
+
+    @Override
+    public String toString() {
+        return "\tUsername: " + username + "\n\tLast Unlocked Level: " + lastUnlockedLevel + "\n\tCollected Coins: " + collectedCoins + "\n";
+    }
 }

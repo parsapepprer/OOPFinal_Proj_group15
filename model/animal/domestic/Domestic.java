@@ -10,8 +10,8 @@ public abstract class Domestic extends Animal {
     protected int produceRemainingTime;
     protected String product;
 
-    public Domestic(int price, int produceTime, String name, String product) {
-        super(price, name, 10, 5, 1);
+    public Domestic(int price, int produceTime, String product) {
+        super(price, 10, 5, 1);
         this.produceTime = produceTime;
         this.produceRemainingTime = produceTime;
         this.product = product;
@@ -20,7 +20,11 @@ public abstract class Domestic extends Animal {
     public void move() {
         preI = i;
         preJ = j;
-        if (this.lifetime > 5) move(rand.nextBoolean(), rand.nextBoolean());
+        if (this.lifetime > 5) {
+            move(rand.nextBoolean(), rand.nextBoolean());
+            Game.getInstance().getDomesticAnimals(preI, preJ).remove(this);
+            Game.getInstance().getDomesticAnimals(i, j).add(this);
+        }
         else {
             boolean direction = false;
             boolean vertical = false;
@@ -47,28 +51,32 @@ public abstract class Domestic extends Animal {
     }
 
     public void work() {
-        if (produceRemainingTime > 0) produceRemainingTime--;
-        if (produceRemainingTime == 0) {
-            produceRemainingTime = produceTime;
-            GoodList goodList = GoodList.getGood(product);
-            try {
-                Good good = (Good) Class.forName(goodList.getPackageName()).newInstance();
-                good.setPlace(i, j);
-                Game.getInstance().getGoods(i, j).add(good);
-            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
+        if (produceRemainingTime > 0) {
+            produceRemainingTime--;
+            if (produceRemainingTime == 0) {
+                produceRemainingTime = produceTime;
+                GoodList goodList = GoodList.getGood(product);
+                try {
+                    Good good = (Good) Class.forName(goodList.getPackageName()).newInstance();
+                    good.setPlace(i, j);
+                    Game.getInstance().getGoods(i, j).add(good);
+                } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
+                }
             }
         }
 
-        if (lifetime > 0) lifetime--;
-        if (lifetime == 0) {
-            Game.getInstance().getDomesticAnimals(i, j).remove(this);
-            Game.getInstance().updateTask(this.getClass().getSimpleName(), false);
+        if (lifetime > 0) {
+            lifetime--;
+            if (lifetime == 0) {
+                Game.getInstance().getDomesticAnimals(i, j).remove(this);
+                Game.getInstance().updateTask(this.getClass().getSimpleName(), false);
+            }
         }
     }
 
     public void eatGrass() {
         Game.getInstance().getGrass()[i][j]--;
-        lifetime = 10;
+        lifetime = 11;
     }
 
     public boolean isHungry() {
@@ -81,6 +89,6 @@ public abstract class Domestic extends Animal {
 
     @Override
     public String toString() {
-        return name + " " + lifetime * 10 + "% " + "[" + (i + 1) + " " + (j + 1) + "]";
+        return (lifetime > 5 ? "" : "* ") + this.getClass().getSimpleName() + " " + lifetime + " " + "[" + (i + 1) + " " + (j + 1) + "]";
     }
 }

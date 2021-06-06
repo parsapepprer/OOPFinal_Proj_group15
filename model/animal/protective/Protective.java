@@ -8,8 +8,8 @@ import java.util.HashSet;
 
 public abstract class Protective extends Animal {
 
-    public Protective(int price, String name) {
-        super(price, name, Integer.MAX_VALUE, Integer.MAX_VALUE, 1);
+    public Protective(int price) {
+        super(price, Integer.MAX_VALUE, Integer.MAX_VALUE, 1);
     }
 
     public void move() {
@@ -67,28 +67,20 @@ public abstract class Protective extends Animal {
                 }
             }
             if (wilds[0] == null) return;
+
             for (int k = 0; k < size; k++) {
                 for (Wild wild : wilds[k]) {
-                    if (!wild.isInCage()) {
-                        if ((wild.getPreI() == -1 || wild.getPreJ() == -1)) {
-                            if (wild.getI() == i && wild.getJ() == j) {
-                                if (removedWild == null) {
-                                    removedWild = wild;
-                                } else if (wild.isGreaterThan(removedWild)) {
-                                    removedWild = wild;
-                                }
-                            }
-                        } else if (wild.intersection(this)) {
-                            if (removedWild == null) {
-                                removedWild = wild;
-                            } else if (wild.isGreaterThan(removedWild)) {
-                                removedWild = wild;
-                            }
+                    if (!wild.isInCage() && wild.getPreI() != -1 && wild.getPreJ() != -1 && wild.intersection(this)) {
+                        if (removedWild == null) {
+                            removedWild = wild;
+                        } else if (wild.isGreaterThan(removedWild)) {
+                            removedWild = wild;
                         }
                     }
                 }
             }
         }
+
         if (removedWild == null) return;
         Game.getInstance().getWildAnimals(removedWild.getI(), removedWild.getJ()).remove(removedWild);
         Game.getInstance().getProtectiveAnimals(i, j).remove(this);

@@ -3,6 +3,7 @@ package view.game;
 import controller.GameManager;
 import controller.Logger;
 import controller.ResultType;
+import model.Game;
 import view.AbstractMenu;
 
 import java.util.regex.Matcher;
@@ -17,6 +18,7 @@ public class Start extends AbstractMenu {
         this.gameManager.setGame(level);
         Logger.log("info", "The game was set!");
         System.out.println("Game started!");
+        System.out.println(gameManager.inquiry());
         System.out.println();
     }
 
@@ -66,11 +68,15 @@ public class Start extends AbstractMenu {
                 break;
 
             case SUCCESS:
-                System.out.println("The coordinates was checked!");
+                System.out.println("All objects was picked up!");
                 break;
 
             case NOT_EXISTED:
                 System.out.println("There is nothing to pickup!");
+                break;
+
+            case NOT_ENOUGH:
+                System.out.println("The warehouse is full! Some of objects have not been picked up!");
                 break;
 
             case FINISH:
@@ -154,11 +160,11 @@ public class Start extends AbstractMenu {
                 break;
 
             case SUCCESS:
-                System.out.println("The coordinates was checked!");
+                System.out.println("The cage was added!");
                 break;
 
             case NOT_EXISTED:
-                System.out.println("There is nothing to cage!");
+                System.out.println("There is nothing to add cage!");
                 break;
         }
     }
@@ -262,27 +268,31 @@ public class Start extends AbstractMenu {
             case NOT_EXISTED:
                 System.out.println("There is no such object that can be upgraded!");
                 break;
+
+            case BAD_CONDITION:
+                System.out.println("The object is at its last level!");
         }
     }
 
     @Override
     public void run() {
+        if (Game.getInstance().checkTaskFinished()) {
+            System.out.println(gameManager.finish().getValue());
+        }
         String command;
         Matcher matcher;
-        while (!Commands.EXIT.getMatcher(command = scanner.nextLine()).matches()) {
+        while (!Commands.MENU.getMatcher(command = scanner.nextLine()).matches()) {
             if (gameManager.isFinished()) {
-                if (Commands.MENU.getMatcher(command).matches()) {
-                    break;
-                } else {
-                    System.out.println("Game finished! Enter MENU or EXIT to go to the game menu!");
-                }
+                System.out.println("Game finished! Enter MENU to go to the game menu!");
             } else if ((matcher = Commands.TRUCK_LOAD.getMatcher(command)).matches()) {
                 truckLoad(matcher);
             } else if ((matcher = Commands.TRUCK_UNLOAD.getMatcher(command)).matches()) {
                 truckUnload(matcher);
             } else if (Commands.TRUCK_GO.getMatcher(command).matches()) {
                 truckGo();
-            } else if (!gameManager.truckIsEmpty()) {
+            } else if (Commands.INQUIRY.getMatcher(command).matches()) {
+                inquiry();
+            } else if (gameManager.truckInUse()) {
                 System.out.println("The truck is not empty! You must finish your work with truck!");
             } else if (Commands.WELL.getMatcher(command).matches()) {
                 well();
@@ -298,8 +308,6 @@ public class Start extends AbstractMenu {
                 work(matcher);
             } else if ((matcher = Commands.CAGE.getMatcher(command)).matches()) {
                 cage(matcher);
-            } else if (Commands.INQUIRY.getMatcher(command).matches()) {
-                inquiry();
             } else if ((matcher = Commands.TURN.getMatcher(command)).matches()) {
                 turn(matcher);
             } else if ((matcher = Commands.UPGRADE.getMatcher(command)).matches()) {
@@ -309,5 +317,6 @@ public class Start extends AbstractMenu {
             }
             System.out.println();
         }
+        System.out.println();
     }
 }

@@ -92,29 +92,29 @@ public class MissionManager {
         // ---------- Enter the Specifications -----------
         level = 1;
 
-        numberOfInitialCoins = 400;
+        numberOfInitialCoins = 200;
 
-        domesticAnimals.put("Chicken", 1);
+        //domesticAnimals.put("Chicken", 80);
         //domesticAnimals.put("Buffalo", 2);
 
-        //protectiveAnimals.put("Hound", 1);
+        protectiveAnimals.put("Hound", 2);
 
-        //collectorAnimals.put("Cat", 1);
+        //collectorAnimals.put("Cat", 5);
 
-        //factoriesSet.add("Mill");
+        //factoriesSet.add("Bakery");
         //factoriesSet.add("MilkPacker");
 
-        //wildAnimalsTime.put("Lion", new Integer[]{1, 10});
+        wildAnimalsTime.put("Tiger", new Integer[]{1, 1});
         //wildAnimalsTime.put("Bear", new Integer[]{20, 21});
 
-        tasksMap.put("Egg", 1);
-        //tasksMap.put("Chicken", 3);
+        tasksMap.put("Chicken", 100);
+        //tasksMap.put("Flour", 2);
         //tasksMap.put("Buffalo", 3);
         //tasksMap.put("Coin", 500);
         //tasksMap.put("Lion", 2);
 
-        maxPrizeTime = 50;
-        prize = 70;
+        maxPrizeTime = 10;
+        prize = 50;
         // -----------------------------------------------
 
         HashMap<DomesticList, Integer> domestics = new HashMap<>();

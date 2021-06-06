@@ -10,6 +10,8 @@ import java.util.Map;
 public class Warehouse {
     private int capacity;
     private int upgradePrice;
+    private int level;
+    private int finalLevel;
     private HashSet<Wild> wilds;
     private HashSet<Good> goods;
 
@@ -18,6 +20,8 @@ public class Warehouse {
         wilds = new HashSet<>();
         goods = new HashSet<>();
         upgradePrice = 450;
+        level = 1;
+        finalLevel = 3;
     }
 
     public int getCapacity() {
@@ -30,7 +34,12 @@ public class Warehouse {
 
     public void upgrade() {
         capacity += 15;
-        upgradePrice += 100;
+        upgradePrice *= 1.2;
+        level++;
+    }
+
+    public boolean checkFinalLevel() {
+        return level >= finalLevel;
     }
 
     public boolean addWild(HashSet<Wild> wildSet) {
@@ -115,13 +124,16 @@ public class Warehouse {
         return space;
     }
 
+    public boolean isEmpty() {
+        return goods.isEmpty() && wilds.isEmpty();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n").append("Warehouse:");
-        sb.append("\n").append("\t").append("Capacity = ").append(capacity).append("\n");
+        sb.append("\n").append("Warehouse L").append(level).append(":\n");
+        sb.append("\t").append("Capacity = ").append(capacity).append("\n");
 
-        sb.append("\n").append("\t").append("Wilds:").append("\n");
         HashMap<String, Integer> wildsMap = new HashMap<>();
         for (Wild wild : wilds) {
             String name = wild.getClass().getSimpleName();
@@ -131,11 +143,13 @@ public class Warehouse {
                 wildsMap.put(name, 1);
             }
         }
-        for (Map.Entry<String, Integer> wild : wildsMap.entrySet()) {
-            sb.append("\t").append("\t").append(wild.getKey()).append(": ").append(wild.getValue()).append("\n");
+        if (!wildsMap.isEmpty()) {
+            sb.append("\n").append("\t").append("Wilds:").append("\n");
+            for (Map.Entry<String, Integer> wild : wildsMap.entrySet()) {
+                sb.append("\t").append("\t").append(wild.getKey()).append(": ").append(wild.getValue()).append("\n");
+            }
         }
 
-        sb.append("\n").append("\t").append("Goods:").append("\n");
         HashMap<String, Integer> goodsMap = new HashMap<>();
         for (Good good : goods) {
             String name = good.getClass().getSimpleName();
@@ -145,8 +159,11 @@ public class Warehouse {
                 goodsMap.put(name, 1);
             }
         }
-        for (Map.Entry<String, Integer> good : goodsMap.entrySet()) {
-            sb.append("\t").append("\t").append(good.getKey()).append(": ").append(good.getValue()).append("\n");
+        if (!goodsMap.isEmpty()) {
+            sb.append("\n").append("\t").append("Goods:").append("\n");
+            for (Map.Entry<String, Integer> good : goodsMap.entrySet()) {
+                sb.append("\t").append("\t").append(good.getKey()).append(": ").append(good.getValue()).append("\n");
+            }
         }
         return sb.toString();
     }

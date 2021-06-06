@@ -17,8 +17,7 @@ public enum Commands {
     TURN("^(?i)\\s*turn\\s+([0-9]+)\\s*$"),
     INQUIRY("^(?i)\\s*inquiry\\s*$"),
     UPGRADE("^(?i)\\s*upgrade\\s+([a-zA-Z]+)\\s*$"),
-    MENU("^(?i)\\s*menu\\s*$"),
-    EXIT("^(?i)\\s*exit\\s*$");
+    MENU("^(?i)\\s*menu\\s*$");
 
     private final Pattern commandPattern;
 
