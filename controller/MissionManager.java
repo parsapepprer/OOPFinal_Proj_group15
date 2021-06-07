@@ -94,21 +94,22 @@ public class MissionManager {
 
         numberOfInitialCoins = 200;
 
-        //domesticAnimals.put("Chicken", 80);
+        domesticAnimals.put("Chicken", 1);
         //domesticAnimals.put("Buffalo", 2);
 
-        protectiveAnimals.put("Hound", 2);
+        //protectiveAnimals.put("Hound", 2);
 
         //collectorAnimals.put("Cat", 5);
 
         //factoriesSet.add("Bakery");
         //factoriesSet.add("MilkPacker");
 
-        wildAnimalsTime.put("Tiger", new Integer[]{1, 1});
+        //wildAnimalsTime.put("Tiger", new Integer[]{1, 1});
         //wildAnimalsTime.put("Bear", new Integer[]{20, 21});
 
-        tasksMap.put("Chicken", 100);
+        //tasksMap.put("Chicken", 1);
         //tasksMap.put("Flour", 2);
+        tasksMap.put("Egg", 2);
         //tasksMap.put("Buffalo", 3);
         //tasksMap.put("Coin", 500);
         //tasksMap.put("Lion", 2);
@@ -165,6 +166,10 @@ public class MissionManager {
             factories.add(FactoryList.getFactory(factory));
         }
 
+        if (tasksMap.isEmpty()) {
+            System.out.println("Tasks have some problems!");
+            return;
+        }
         for (String task : tasksMap.keySet()) {
             if (tasksMap.get(task) == 0) {
                 System.out.println("Tasks have some problems!");

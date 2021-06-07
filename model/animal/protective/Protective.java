@@ -4,6 +4,7 @@ import model.Game;
 import model.animal.Animal;
 import model.animal.wild.Wild;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public abstract class Protective extends Animal {
@@ -18,8 +19,22 @@ public abstract class Protective extends Animal {
         boolean direction = false;
         boolean vertical = false;
         int distance = Integer.MAX_VALUE;
-        for (int ii = 0; ii < Game.SIZE; ii++) {
-            for (int jj = 0; jj < Game.SIZE; jj++) {
+
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        ArrayList<Integer> listI = new ArrayList<>();
+        ArrayList<Integer> listJ = new ArrayList<>();
+        for (int k = 0; k < Game.SIZE; k++) {
+            list1.add(k);
+            list2.add(k);
+        }
+        for (int k = Game.SIZE; k > 0; k--) {
+            listI.add(list1.remove(rand.nextInt(k)));
+            listJ.add(list2.remove(rand.nextInt(k)));
+        }
+
+        for (Integer ii : listI) {
+            for (Integer jj : listJ) {
                 for (Wild wild : Game.getInstance().getWildAnimals(ii, jj)) {
                     if (!wild.isInCage()) {
                         int dis = Math.abs(ii - i) + Math.abs(jj - j);

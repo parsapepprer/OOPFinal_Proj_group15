@@ -43,7 +43,7 @@ public class GameManager {
             sb.append("Prize for finishing in time: 0 Coins\n");
         }
         sb.append("You collected ").append(game.getCoin()).append(" Coins in this level!\n");
-        sb.append("Enter MENU to go to the game menu!\n");
+        sb.append("Enter MENU to go to the game menu!");
         result.setValue(sb.toString());
         return result;
     }

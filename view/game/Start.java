@@ -278,6 +278,7 @@ public class Start extends AbstractMenu {
     public void run() {
         if (Game.getInstance().checkTaskFinished()) {
             System.out.println(gameManager.finish().getValue());
+            System.out.println();
         }
         String command;
         Matcher matcher;

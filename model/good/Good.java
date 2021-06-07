@@ -13,7 +13,7 @@ public abstract class Good {
 
     public Good(int space, int lifetime, int price) {
         this.space = space;
-        this.lifetime = lifetime;
+        this.lifetime = lifetime + 1;
         this.price = price;
         this.rand = new Random();
         this.i = rand.nextInt(Game.SIZE);
@@ -23,6 +23,10 @@ public abstract class Good {
     public void setPlace(int i, int j) {
         this.i = i;
         this.j = j;
+    }
+
+    public int getLifetime() {
+        return lifetime;
     }
 
     public int getSpace() {

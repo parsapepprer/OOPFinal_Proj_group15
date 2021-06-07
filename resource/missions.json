@@ -2,20 +2,15 @@
   {
     "level": 1,
     "numberOfInitialCoins": 200,
-    "domesticAnimals": {},
-    "protectiveAnimals": {
-      "HOUND": 2
+    "domesticAnimals": {
+      "CHICKEN": 1
     },
+    "protectiveAnimals": {},
     "collectorAnimals": {},
     "factories": [],
-    "wildAnimalsTime": {
-      "TIGER": [
-        1,
-        1
-      ]
-    },
+    "wildAnimalsTime": {},
     "tasks": {
-      "Chicken": 100
+      "Egg": 2
     },
     "maxPrizeTime": 10,
     "prize": 50

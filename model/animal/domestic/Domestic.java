@@ -5,13 +5,17 @@ import model.animal.Animal;
 import model.good.Good;
 import model.good.GoodList;
 
+import java.util.ArrayList;
+
 public abstract class Domestic extends Animal {
     protected int produceTime;
     protected int produceRemainingTime;
     protected String product;
+    private int fulLifetime;
 
     public Domestic(int price, int produceTime, String product) {
         super(price, 10, 5, 1);
+        this.fulLifetime = 10;
         this.produceTime = produceTime;
         this.produceRemainingTime = produceTime;
         this.product = product;
@@ -29,10 +33,24 @@ public abstract class Domestic extends Animal {
             boolean direction = false;
             boolean vertical = false;
             int distance = Integer.MAX_VALUE;
-            for (int ii = 0; ii < Game.SIZE; ii++) {
-                for (int jj = 0; jj < Game.SIZE; jj++) {
+
+            ArrayList<Integer> list1 = new ArrayList<>();
+            ArrayList<Integer> list2 = new ArrayList<>();
+            ArrayList<Integer> listI = new ArrayList<>();
+            ArrayList<Integer> listJ = new ArrayList<>();
+            for (int k = 0; k < Game.SIZE; k++) {
+                list1.add(k);
+                list2.add(k);
+            }
+            for (int k = Game.SIZE; k > 0; k--) {
+                listI.add(list1.remove(rand.nextInt(k)));
+                listJ.add(list2.remove(rand.nextInt(k)));
+            }
+
+            for (Integer ii : listI) {
+                for (Integer jj : listJ) {
+                    int dis = Math.abs(ii - i) + Math.abs(jj - j);
                     if (Game.getInstance().getGrass()[ii][jj] > 0) {
-                        int dis = Math.abs(ii - i) + Math.abs(jj - j);
                         if (dis < distance) {
                             distance = dis;
                             vertical = Math.abs(ii - i) > Math.abs(jj - j);
@@ -76,7 +94,7 @@ public abstract class Domestic extends Animal {
 
     public void eatGrass() {
         Game.getInstance().getGrass()[i][j]--;
-        lifetime = 11;
+        lifetime = fulLifetime + 1;
     }
 
     public boolean isHungry() {

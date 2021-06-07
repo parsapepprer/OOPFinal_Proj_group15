@@ -932,3 +932,59 @@
 06/06/2021 - 20:21:42, [INFO], The user entered the level.
 06/06/2021 - 20:21:42, [INFO], The user started the game level 1.
 06/06/2021 - 20:21:42, [INFO], The game was set!
+06/06/2021 - 20:59:06, [ADMIN], The missions of the level 1 was changed!
+06/06/2021 - 20:59:16, [INFO], A user wanted to log in.
+06/06/2021 - 20:59:17, [INFO], User MHZ
+06/06/2021 - 20:59:18, [INFO], MHZ entered the game menu.
+06/06/2021 - 20:59:20, [INFO], The user wanted to start the game.
+06/06/2021 - 20:59:20, [INFO], The user entered the level.
+06/06/2021 - 20:59:20, [INFO], The user started the game level 1.
+06/06/2021 - 20:59:20, [INFO], The game was set!
+06/06/2021 - 20:59:54, [INFO], The user logged out.
+06/06/2021 - 21:00:07, [INFO], The user returned to the game menu.
+06/06/2021 - 21:00:10, [INFO], The user closed the game.
+06/06/2021 - 21:02:23, [INFO], A user wanted to log in.
+06/06/2021 - 21:02:24, [INFO], User MHZ
+06/06/2021 - 21:02:25, [INFO], MHZ entered the game menu.
+06/06/2021 - 21:02:27, [INFO], The user wanted to start the game.
+06/06/2021 - 21:02:28, [INFO], The user entered the level.
+06/06/2021 - 21:02:28, [INFO], The user started the game level 1.
+06/06/2021 - 21:02:28, [INFO], The game was set!
+06/06/2021 - 21:02:46, [INFO], The user wanted to start the game.
+06/06/2021 - 21:02:47, [INFO], The user entered the level.
+06/06/2021 - 21:02:47, [INFO], The user started the game level 1.
+06/06/2021 - 21:02:47, [INFO], The game was set!
+06/06/2021 - 21:03:17, [INFO], The user closed the game.
+06/06/2021 - 21:04:52, [INFO], A user wanted to log in.
+06/06/2021 - 21:04:54, [INFO], User MHZ
+06/06/2021 - 21:04:55, [INFO], MHZ entered the game menu.
+06/06/2021 - 21:04:56, [INFO], The user wanted to start the game.
+06/06/2021 - 21:04:57, [INFO], The user entered the level.
+06/06/2021 - 21:04:57, [INFO], The user started the game level 1.
+06/06/2021 - 21:04:57, [INFO], The game was set!
+06/06/2021 - 21:05:09, [ADMIN], The missions of the level 1 was changed!
+06/06/2021 - 21:05:15, [INFO], A user wanted to log in.
+06/06/2021 - 21:05:16, [INFO], User MHZ
+06/06/2021 - 21:05:17, [INFO], MHZ entered the game menu.
+06/06/2021 - 21:05:18, [INFO], The user wanted to start the game.
+06/06/2021 - 21:05:19, [INFO], The user entered the level.
+06/06/2021 - 21:05:19, [INFO], The user started the game level 1.
+06/06/2021 - 21:05:19, [INFO], The game was set!
+06/06/2021 - 21:06:47, [ADMIN], The missions of the level 1 was changed!
+06/06/2021 - 21:06:52, [INFO], A user wanted to log in.
+06/06/2021 - 21:06:53, [INFO], User MHZ
+06/06/2021 - 21:06:54, [INFO], MHZ entered the game menu.
+06/06/2021 - 21:06:55, [INFO], The user wanted to start the game.
+06/06/2021 - 21:06:57, [INFO], The user entered the level.
+06/06/2021 - 21:06:57, [INFO], The user started the game level 1.
+06/06/2021 - 21:06:57, [INFO], The game was set!
+06/06/2021 - 21:07:13, [INFO], The user closed the game.
+06/06/2021 - 21:08:17, [ADMIN], The missions of the level 1 was changed!
+06/06/2021 - 21:08:26, [ADMIN], The missions of the level 1 was changed!
+07/06/2021 - 12:19:42, [INFO], A user wanted to log in.
+07/06/2021 - 12:19:43, [INFO], User MHZ
+07/06/2021 - 12:19:44, [INFO], MHZ entered the game menu.
+07/06/2021 - 12:19:45, [INFO], The user wanted to start the game.
+07/06/2021 - 12:19:46, [INFO], The user entered the level.
+07/06/2021 - 12:19:46, [INFO], The user started the game level 1.
+07/06/2021 - 12:19:46, [INFO], The game was set!
