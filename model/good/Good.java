@@ -25,10 +25,6 @@ public abstract class Good {
         this.j = j;
     }
 
-    public int getLifetime() {
-        return lifetime;
-    }
-
     public int getSpace() {
         return space;
     }
