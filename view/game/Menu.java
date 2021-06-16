@@ -53,7 +53,7 @@ public class Menu extends AbstractMenu {
                             }
 
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            e.printStackTrace(); // for showing possible exception
                             Logger.log("error", "The user entered a invalid level.");
                             System.out.println("The level is invalid!");
                             System.out.println();
@@ -68,7 +68,7 @@ public class Menu extends AbstractMenu {
 
                     } else if (nextMenuNum == 3) {
                         System.out.println();
-                        Logger.log("info", "The user logged out.");
+                        Logger.log("info", "The user wanted to see his/her information.");
                         new Information(user).run();
                         break;
 

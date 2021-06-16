@@ -16,7 +16,7 @@ public abstract class Protective extends Animal {
     public void move() {
         preI = i;
         preJ = j;
-        boolean direction = false;
+        boolean horizontal = false;
         boolean vertical = false;
         int distance = Integer.MAX_VALUE;
 
@@ -41,14 +41,14 @@ public abstract class Protective extends Animal {
                         if (dis < distance) {
                             distance = dis;
                             vertical = Math.abs(ii - i) > Math.abs(jj - j);
-                            direction = (ii - i) + (jj - j) > 0;
+                            horizontal = (ii - i) + (jj - j) > 0;
                         }
                     }
                 }
             }
         }
         if (distance == Integer.MAX_VALUE) super.move(rand.nextBoolean(), rand.nextBoolean());
-        else if (distance != 0) super.move(vertical, direction);
+        else if (distance != 0) super.move(vertical, horizontal);
         if (distance != 0) {
             Game.getInstance().getProtectiveAnimals(preI, preJ).remove(this);
             Game.getInstance().getProtectiveAnimals(i, j).add(this);
@@ -85,7 +85,7 @@ public abstract class Protective extends Animal {
 
             for (int k = 0; k < size; k++) {
                 for (Wild wild : wilds[k]) {
-                    if (!wild.isInCage() && wild.getPreI() != -1 && wild.getPreJ() != -1 && wild.intersection(this)) {
+                    if (!wild.isInCage() && wild.getPreI() != -1 && wild.getPreJ() != -1 && wild.encounter(this)) {
                         if (removedWild == null) {
                             removedWild = wild;
                         } else if (wild.isGreaterThan(removedWild)) {

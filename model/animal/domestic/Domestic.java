@@ -30,7 +30,7 @@ public abstract class Domestic extends Animal {
             Game.getInstance().getDomesticAnimals(i, j).add(this);
         }
         else {
-            boolean direction = false;
+            boolean horizontal = false;
             boolean vertical = false;
             int distance = Integer.MAX_VALUE;
 
@@ -54,13 +54,13 @@ public abstract class Domestic extends Animal {
                         if (dis < distance) {
                             distance = dis;
                             vertical = Math.abs(ii - i) > Math.abs(jj - j);
-                            direction = (ii - i) + (jj - j) > 0;
+                            horizontal = (ii - i) + (jj - j) > 0;
                         }
                     }
                 }
             }
             if (distance == Integer.MAX_VALUE) super.move(rand.nextBoolean(), rand.nextBoolean());
-            else if (distance != 0) super.move(vertical, direction);
+            else if (distance != 0) super.move(vertical, horizontal);
             if (distance != 0) {
                 Game.getInstance().getDomesticAnimals(preI, preJ).remove(this);
                 Game.getInstance().getDomesticAnimals(i, j).add(this);

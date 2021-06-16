@@ -213,8 +213,12 @@ public class Game {
             }
         }
         isFinished = true;
-        if (time <= mission.getMaxPrizeTime()) coin += mission.getPrize();
-        UserManager.getInstance().updateUser(user, mission.getLevel() + 1, coin);
+        boolean rewarded = false;
+        if (time <= mission.getMaxPrizeTime()) {
+            coin += mission.getPrize();
+            rewarded = true;
+        }
+        UserManager.getInstance().updateUser(user, mission.getLevel(), coin, rewarded);
         return true;
     }
 

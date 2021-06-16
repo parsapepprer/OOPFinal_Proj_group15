@@ -27,8 +27,15 @@ public class UserManager {
         return userManagerInstance;
     }
 
-    public void updateUser(User user, int level, int coin) {
-        user.updateUser(level, coin);
+    public void resetUsers() {
+        for (User user : users) {
+            user.resetMission();
+        }
+        save();
+    }
+
+    public void updateUser(User user, int level, int coin, boolean rewarded) {
+        user.updateUser(level, coin, rewarded);
         save();
     }
 

@@ -17,7 +17,7 @@ public abstract class Collector extends Animal {
     public void move() {
         preI = i;
         preJ = j;
-        boolean direction = false;
+        boolean horizontal = false;
         boolean vertical = false;
         int distance = Integer.MAX_VALUE;
 
@@ -43,7 +43,7 @@ public abstract class Collector extends Animal {
                         if (dis < distance) {
                             distance = dis;
                             vertical = Math.abs(ii - i) > Math.abs(jj - j);
-                            direction = (ii - i) + (jj - j) > 0;
+                            horizontal = (ii - i) + (jj - j) > 0;
                         }
                         break;
                     }
@@ -52,7 +52,7 @@ public abstract class Collector extends Animal {
         }
 
         if (distance == Integer.MAX_VALUE) super.move(rand.nextBoolean(), rand.nextBoolean());
-        else if (distance != 0) super.move(vertical, direction);
+        else if (distance != 0) super.move(vertical, horizontal);
 
         if (distance != 0) {
             Game.getInstance().getCollectorAnimals(preI, preJ).remove(this);

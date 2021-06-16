@@ -54,14 +54,14 @@ public abstract class Animal {
         return this.getClass().getSimpleName() + " [" + (i + 1) + " " + (j + 1) + "]";
     }
 
-    public void move(boolean vertical, boolean direction) {
+    public void move(boolean vertical, boolean horizontal) {
         if (vertical) {
             if (i < step) {
                 i += step;
             } else if (i >= Game.SIZE - step) {
                 i -= step;
             } else {
-                i += (direction ? step : -step);
+                i += (horizontal ? step : -step);
             }
         } else {
             if (j < step) {
@@ -69,12 +69,12 @@ public abstract class Animal {
             } else if (j >= Game.SIZE - step) {
                 j -= step;
             } else {
-                j += (direction ? step : -step);
+                j += (horizontal ? step : -step);
             }
         }
     }
 
-    public boolean intersection(Animal that) {
+    public boolean encounter(Animal that) {
         if (this.i != this.preI && this.j != this.preJ) return false;
         if (that.j != that.preJ && that.i != that.preI) return false;
         if (this.i == this.preI && that.j == that.preJ) return false;

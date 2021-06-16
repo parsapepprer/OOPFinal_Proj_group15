@@ -3,25 +3,17 @@ package model.animal.wild;
 import model.Game;
 import model.animal.Animal;
 import model.animal.domestic.Domestic;
-import model.good.Good;
 
-import java.util.Collections;
 import java.util.HashSet;
 
 public abstract class Wild extends Animal {
-    protected int space;
     protected int cageNeeded;
     protected int cageRemaining;
 
     public Wild(int cageNeeded, int price, int step) {
         super(price, 5, 15, step);
-        this.space = 15;
         this.cageNeeded = cageNeeded;
         this.cageRemaining = cageNeeded;
-    }
-
-    public int getSpace() {
-        return space;
     }
 
     public boolean isInCage() {
@@ -59,8 +51,8 @@ public abstract class Wild extends Animal {
             if (cageRemaining < cageNeeded) cageRemaining++;
 
             Game.getInstance().getGoods(i, j).clear();
-
             HashSet<Domestic> removedDomestic = new HashSet<>(Game.getInstance().getDomesticAnimals(i, j));
+
             if (preI != -1 && preJ != -1) {
                 HashSet<Domestic>[] domestics = new HashSet[Game.SIZE];
 
@@ -68,17 +60,25 @@ public abstract class Wild extends Animal {
                     for (int k = 0; k < Game.SIZE; k++) {
                         domestics[k] = Game.getInstance().getDomesticAnimals(i, k);
                     }
+
+                    for (int k = Math.min(preJ, j) + 1; k < Math.max(preJ, j); k++) {
+                        Game.getInstance().getGoods(i, k).clear();
+                    }
                 }
                 if (j == preJ) {
                     for (int k = 0; k < Game.SIZE; k++) {
                         domestics[k] = Game.getInstance().getDomesticAnimals(k, j);
+                    }
+
+                    for (int k = Math.min(preI, i) + 1; k < Math.max(preI, i); k++) {
+                        Game.getInstance().getGoods(k, j).clear();
                     }
                 }
                 if (domestics[0] == null) return;
 
                 for (int k = 0; k < Game.SIZE; k++) {
                     for (Domestic domestic : domestics[k]) {
-                        if (domestic.getPreI() != -1 && domestic.getPreJ() != -1 && domestic.intersection(this)) {
+                        if (domestic.getPreI() != -1 && domestic.getPreJ() != -1 && domestic.encounter(this)) {
                             removedDomestic.add(domestic);
                         }
                     }

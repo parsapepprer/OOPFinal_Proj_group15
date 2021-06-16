@@ -38,11 +38,17 @@ public class MissionManager {
             missions.set(level - 1, mission);
             Logger.log("admin", "The missions of the level " + level + " was changed!");
             System.out.println("Successful change!");
+            UserManager.getInstance().resetUsers();
+            Logger.log("admin", "The users info was reset!");
+            System.out.println("All users have been reset!");
             save();
         } else if (level == missions.size() + 1) {
             missions.add(level - 1, mission);
             Logger.log("admin", "A new level (" + level + ") was added to levels!");
             System.out.println("Successful add!");
+            UserManager.getInstance().resetUsers();
+            Logger.log("admin", "The users info was reset!");
+            System.out.println("All users have been reset!");
             save();
         } else {
             Logger.log("admin", "The level admin entered was invalid!");
@@ -90,31 +96,32 @@ public class MissionManager {
         int prize;
 
         // ---------- Enter the Specifications -----------
-        level = 1;
+        level = 3;
 
         numberOfInitialCoins = 200;
 
-        domesticAnimals.put("Chicken", 1);
+        domesticAnimals.put("Chicken", 2);
         //domesticAnimals.put("Buffalo", 2);
 
         //protectiveAnimals.put("Hound", 2);
 
         //collectorAnimals.put("Cat", 5);
 
-        //factoriesSet.add("Bakery");
+        factoriesSet.add("Mill");
         //factoriesSet.add("MilkPacker");
 
-        //wildAnimalsTime.put("Tiger", new Integer[]{1, 1});
+        wildAnimalsTime.put("Lion", new Integer[]{2, 6, 12, 18});
         //wildAnimalsTime.put("Bear", new Integer[]{20, 21});
 
         //tasksMap.put("Chicken", 1);
-        //tasksMap.put("Flour", 2);
-        tasksMap.put("Egg", 2);
+        //tasksMap.put("Flour", 10);
+        tasksMap.put("Bread", 10);
+        //tasksMap.put("Egg", 10);
         //tasksMap.put("Buffalo", 3);
         //tasksMap.put("Coin", 500);
         //tasksMap.put("Lion", 2);
 
-        maxPrizeTime = 10;
+        maxPrizeTime = 30;
         prize = 50;
         // -----------------------------------------------
 
@@ -132,7 +139,6 @@ public class MissionManager {
             }
             domestics.put(DomesticList.getDomestic(animal), domesticAnimals.get(animal));
         }
-
 
         for (String animal : protectiveAnimals.keySet()) {
             if (ProtectiveList.getProtective(animal) == null || protectiveAnimals.get(animal) == 0) {

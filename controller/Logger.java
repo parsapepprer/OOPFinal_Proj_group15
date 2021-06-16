@@ -14,9 +14,8 @@ public abstract class Logger {
             if (!file.exists()) file.createNewFile();
 
             FileWriter fileWriter = new FileWriter(file, true);
-            Date date = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
-            fileWriter.write(String.format("%s, [%s], %s\n", formatter.format(date), type.toUpperCase(), event));
+            fileWriter.write(String.format("%s, [%s], %s\n", formatter.format(new Date()), type.toUpperCase(), event));
 
             fileWriter.close();
         } catch (IOException ignored) {
