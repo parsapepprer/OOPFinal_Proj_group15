@@ -63,19 +63,15 @@ public class GameManager {
     }
 
     public ResultType well() {
-        if (game.getWater() > 0) return ResultType.BAD_CONDITION;
-        if (game.wellIsWorking()) return ResultType.EXISTED;
-        if (game.getFillPrice() > game.getCoin()) return ResultType.NOT_ENOUGH;
-        game.decreaseCoin(game.getFillPrice());
-        game.wellStart();
-        return ResultType.SUCCESS;
+        return game.getWell().work();
     }
 
     public ResultType plant(int i, int j) {
         if (i <= 0 || j <= 0 || i > Game.SIZE || j > Game.SIZE) {
             return ResultType.INVALID_NUMBER;
         }
-        if (game.getWater() <= 0) return ResultType.NOT_ENOUGH;
+        if (game.getWell().getWater() <= 0) return ResultType.NOT_ENOUGH;
+        game.getWell().decreaseWater();
         game.plant(i - 1, j - 1);
         return ResultType.SUCCESS;
     }
@@ -330,11 +326,8 @@ public class GameManager {
             }
             sb.append("\n");
         }
-        sb.append("\n").append("Well L").append(game.getWaterLevel()).append(":\n");
-        if (game.wellIsWorking())
-            sb.append("\t").append("Remaining Time to Fill Well = ").append(game.getFillRemainingTime()).append("\n");
-        else
-            sb.append("\t").append("Water = ").append(game.getWater()).append("\n");
+
+        sb.append(game.getWell().toString());
 
         if (!game.getAllDomestics().isEmpty()) {
             sb.append("\n").append("Domestics:\n");
@@ -457,13 +450,13 @@ public class GameManager {
         }
 
         if (name.matches("^(?i)\\s*well\\s*$")) {
-            if (game.getUpgradePrice() > game.getCoin()) {
+            if (game.getWell().getUpgradePrice() > game.getCoin()) {
                 return ResultType.NOT_ENOUGH;
-            } else if (game.checkFinalLevel()) {
+            } else if (game.getWell().checkFinalLevel()) {
                 return ResultType.BAD_CONDITION;
             } else {
-                game.decreaseCoin(game.getUpgradePrice());
-                game.upgradeWell();
+                game.decreaseCoin(game.getWell().getUpgradePrice());
+                game.getWell().upgrade();
                 ResultType result = ResultType.SUCCESS;
                 result.setValue("Well");
                 return result;
@@ -488,7 +481,7 @@ public class GameManager {
 
     private void update() {
         game.increaseTime();
-        game.updateWell();
+        game.getWell().update();
         game.getTruck().update();
         for (Domestic domestic : game.getAllDomestics()) {
             domestic.move();

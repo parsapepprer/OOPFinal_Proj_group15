@@ -42,24 +42,16 @@ public class Game {
 
     private final Warehouse warehouse;
     private final Truck truck;
+    private final Well well;
 
     private final int[][] grass;
-
-    private int waterLevel;
-    private final int waterFinalLevel;
-    private int bucketCapacity;
-    private int water;
-    private final int fillTime;
-    private int fillRemainingTime;
-    private int fillPrice;
-    private int upgradePrice;
 
     private final HashSet<Factory> factories;
     private final HashSet<Domestic>[][] domesticAnimals;
     private final HashSet<Wild>[][] wildAnimals;
     private final HashSet<Good>[][] goods;
     private final HashSet<Protective>[][] protectiveAnimals;
-    private HashSet<Collector>[][] collectorAnimals;
+    private final HashSet<Collector>[][] collectorAnimals;
 
     private Game(Mission mission, User user) {
         this.mission = mission;
@@ -78,19 +70,11 @@ public class Game {
 
         warehouse = new Warehouse();
         truck = new Truck();
+        well = new Well();
 
         grass = new int[SIZE][SIZE];
         for (int[] ints : grass)
             Arrays.fill(ints, 0);
-
-        waterFinalLevel = 3;
-        waterLevel = 1;
-        bucketCapacity = 5;
-        water = bucketCapacity;
-        fillTime = 3;
-        fillRemainingTime = 0;
-        fillPrice = 20;
-        upgradePrice = 100;
 
         factories = new HashSet<>();
         for (FactoryList name : mission.getFactories()) {
@@ -152,25 +136,6 @@ public class Game {
         return parameters;
     }
 
-    public void upgradeWell() {
-        waterLevel++;
-        bucketCapacity += 1;
-        fillPrice -= 2;
-        upgradePrice *= 1.2;
-    }
-
-    public boolean checkFinalLevel() {
-        return waterLevel >= waterFinalLevel;
-    }
-
-    public int getWaterLevel() {
-        return waterLevel;
-    }
-
-    public int getUpgradePrice() {
-        return upgradePrice;
-    }
-
     public void loadWilds() {
         for (WildList name : mission.getWildAnimalsTime().keySet()) {
             for (int i = 0; i < mission.getWildAnimalsTime().get(name).length; i++) {
@@ -230,28 +195,7 @@ public class Game {
         return mission;
     }
 
-    public void wellStart() {
-        fillRemainingTime = fillTime;
-    }
-
-    public int getWater() {
-        return water;
-    }
-
-    public int getFillPrice() {
-        return fillPrice;
-    }
-
-    public boolean wellIsWorking() {
-        return fillRemainingTime > 0;
-    }
-
-    public int getFillRemainingTime() {
-        return fillRemainingTime;
-    }
-
     public void plant(int i, int j) {
-        water--;
         grass[i][j]++;
     }
 
@@ -285,6 +229,10 @@ public class Game {
 
     public Truck getTruck() {
         return truck;
+    }
+
+    public Well getWell() {
+        return well;
     }
 
     public int getCoin() {
@@ -385,15 +333,6 @@ public class Game {
 
     public void increaseTime() {
         time++;
-    }
-
-    public void updateWell() {
-        if (fillRemainingTime > 0) {
-            fillRemainingTime--;
-            if (fillRemainingTime == 0) {
-                water = bucketCapacity;
-            }
-        }
     }
 
     public HashSet<Domestic> getAllDomestics() {

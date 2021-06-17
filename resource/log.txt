@@ -336,3 +336,59 @@
 16/06/2021 - 17:26:32, [INFO], The user wanted to see his/her information.
 16/06/2021 - 17:26:44, [INFO], The user returned to the game menu.
 16/06/2021 - 17:26:45, [INFO], The user closed the game.
+17/06/2021 - 10:58:02, [INFO], A user wanted to log in.
+17/06/2021 - 10:58:05, [INFO], User MHZ
+17/06/2021 - 10:58:08, [INFO], MHZ entered the game menu.
+17/06/2021 - 10:58:09, [INFO], The user wanted to start the game.
+17/06/2021 - 10:58:10, [INFO], The user entered the level.
+17/06/2021 - 10:58:10, [INFO], The user started the game level 1.
+17/06/2021 - 10:58:10, [INFO], The game level was set!
+17/06/2021 - 10:58:10, [INFO], The game started!
+17/06/2021 - 10:58:13, [INFO], The user entered the plant command!
+17/06/2021 - 10:58:13, [INFO], Plant was successful!
+17/06/2021 - 10:58:15, [INFO], The user entered the plant command!
+17/06/2021 - 10:58:15, [INFO], Plant was successful!
+17/06/2021 - 10:58:18, [INFO], The user entered the plant command!
+17/06/2021 - 10:58:18, [INFO], Plant was successful!
+17/06/2021 - 10:58:21, [INFO], The user entered the plant command!
+17/06/2021 - 10:58:21, [INFO], Plant was successful!
+17/06/2021 - 10:58:24, [INFO], The user entered the inquiry command!
+17/06/2021 - 10:58:40, [INFO], The user entered the well command!
+17/06/2021 - 10:58:40, [ALARM], The water bucket was not empty!
+17/06/2021 - 10:58:46, [INFO], The user entered the plant command!
+17/06/2021 - 10:58:46, [INFO], Plant was successful!
+17/06/2021 - 10:58:48, [INFO], The user entered the well command!
+17/06/2021 - 10:58:48, [INFO], The well started working!
+17/06/2021 - 10:58:59, [INFO], The user entered the inquiry command!
+17/06/2021 - 10:59:09, [INFO], The user entered the turn command!
+17/06/2021 - 10:59:10, [INFO], The time went on!
+17/06/2021 - 10:59:15, [INFO], The user entered the turn command!
+17/06/2021 - 10:59:15, [INFO], The time went on!
+17/06/2021 - 11:03:32, [INFO], A user wanted to log in.
+17/06/2021 - 11:03:33, [INFO], User MHZ
+17/06/2021 - 11:03:35, [INFO], MHZ entered the game menu.
+17/06/2021 - 11:03:36, [INFO], The user wanted to start the game.
+17/06/2021 - 11:03:36, [INFO], The user entered the level.
+17/06/2021 - 11:03:36, [INFO], The user started the game level 1.
+17/06/2021 - 11:03:36, [INFO], The game level was set!
+17/06/2021 - 11:03:36, [INFO], The game started!
+17/06/2021 - 11:03:44, [INFO], The user entered the upgrade command!
+17/06/2021 - 11:03:44, [INFO], Well was upgraded successfully!
+17/06/2021 - 11:03:47, [ERROR], User entered an illegal commands!
+17/06/2021 - 11:03:50, [INFO], The user entered the inquiry command!
+17/06/2021 - 11:03:56, [INFO], The user entered the plant command!
+17/06/2021 - 11:03:56, [INFO], Plant was successful!
+17/06/2021 - 11:04:00, [INFO], The user entered the plant command!
+17/06/2021 - 11:04:00, [INFO], Plant was successful!
+17/06/2021 - 11:04:01, [INFO], The user entered the plant command!
+17/06/2021 - 11:04:01, [INFO], Plant was successful!
+17/06/2021 - 11:04:05, [INFO], The user entered the plant command!
+17/06/2021 - 11:04:05, [INFO], Plant was successful!
+17/06/2021 - 11:04:08, [INFO], The user entered the plant command!
+17/06/2021 - 11:04:08, [INFO], Plant was successful!
+17/06/2021 - 11:04:13, [INFO], The user entered the inquiry command!
+17/06/2021 - 11:04:16, [INFO], The user entered the well command!
+17/06/2021 - 11:04:16, [INFO], The well started working!
+17/06/2021 - 11:04:18, [INFO], The user entered the inquiry command!
+17/06/2021 - 11:04:22, [INFO], The user entered the turn command!
+17/06/2021 - 11:04:22, [INFO], The time went on!
