@@ -45,7 +45,7 @@ public abstract class Good {
         if (lifetime > 0) {
             lifetime--;
             if (lifetime == 0) {
-                Game.getInstance().getGoods(i, j).remove(this);
+                Game.getInstance().getGoods().remove(this);
             }
         }
     }

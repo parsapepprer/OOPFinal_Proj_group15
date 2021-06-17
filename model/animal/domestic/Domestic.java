@@ -26,10 +26,7 @@ public abstract class Domestic extends Animal {
         preJ = j;
         if (this.lifetime > 5) {
             move(rand.nextBoolean(), rand.nextBoolean());
-            Game.getInstance().getDomesticAnimals(preI, preJ).remove(this);
-            Game.getInstance().getDomesticAnimals(i, j).add(this);
-        }
-        else {
+        } else {
             boolean horizontal = false;
             boolean vertical = false;
             int distance = Integer.MAX_VALUE;
@@ -50,21 +47,16 @@ public abstract class Domestic extends Animal {
             for (Integer ii : listI) {
                 for (Integer jj : listJ) {
                     int dis = Math.abs(ii - i) + Math.abs(jj - j);
-                    if (Game.getInstance().getGrass()[ii][jj] > 0) {
-                        if (dis < distance) {
-                            distance = dis;
-                            vertical = Math.abs(ii - i) > Math.abs(jj - j);
-                            horizontal = (ii - i) + (jj - j) > 0;
-                        }
+                    if (Game.getInstance().getGrass()[ii][jj] > 0 && dis < distance) {
+                        distance = dis;
+                        vertical = Math.abs(ii - i) > Math.abs(jj - j);
+                        horizontal = (ii - i) + (jj - j) > 0;
                     }
                 }
             }
+
             if (distance == Integer.MAX_VALUE) super.move(rand.nextBoolean(), rand.nextBoolean());
             else if (distance != 0) super.move(vertical, horizontal);
-            if (distance != 0) {
-                Game.getInstance().getDomesticAnimals(preI, preJ).remove(this);
-                Game.getInstance().getDomesticAnimals(i, j).add(this);
-            }
         }
     }
 
@@ -77,7 +69,7 @@ public abstract class Domestic extends Animal {
                 try {
                     Good good = (Good) Class.forName(goodList.getPackageName()).newInstance();
                     good.setPlace(i, j);
-                    Game.getInstance().getGoods(i, j).add(good);
+                    Game.getInstance().getGoods().add(good);
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
                 }
             }
@@ -86,7 +78,7 @@ public abstract class Domestic extends Animal {
         if (lifetime > 0) {
             lifetime--;
             if (lifetime == 0) {
-                Game.getInstance().getDomesticAnimals(i, j).remove(this);
+                Game.getInstance().getDomesticAnimals().remove(this);
                 Game.getInstance().updateTask(this.getClass().getSimpleName(), false);
             }
         }

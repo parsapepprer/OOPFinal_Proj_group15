@@ -65,7 +65,7 @@ public abstract class Factory {
                 try {
                     for (int i = 0; i < number; i++) {
                         Good good = (Good) Class.forName(goodList.getPackageName()).newInstance();
-                        Game.getInstance().getGoods(good.getI(), good.getJ()).add(good);
+                        Game.getInstance().getGoods().add(good);
                     }
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
                 }

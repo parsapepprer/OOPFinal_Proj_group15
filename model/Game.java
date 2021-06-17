@@ -13,9 +13,7 @@ import model.factory.Factory;
 import model.factory.FactoryList;
 import model.good.Good;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Game {
 
@@ -47,11 +45,11 @@ public class Game {
     private final int[][] grass;
 
     private final HashSet<Factory> factories;
-    private final HashSet<Domestic>[][] domesticAnimals;
-    private final HashSet<Wild>[][] wildAnimals;
-    private final HashSet<Good>[][] goods;
-    private final HashSet<Protective>[][] protectiveAnimals;
-    private final HashSet<Collector>[][] collectorAnimals;
+    private final HashSet<Domestic> domesticAnimals;
+    private final HashSet<Wild> wildAnimals;
+    private final HashSet<Good> goods;
+    private final HashSet<Protective> protectiveAnimals;
+    private final HashSet<Collector> collectorAnimals;
 
     private Game(Mission mission, User user) {
         this.mission = mission;
@@ -84,56 +82,46 @@ public class Game {
             }
         }
 
-        domesticAnimals = defineHashSet();
+        domesticAnimals = new HashSet<>();
         for (DomesticList name : mission.getDomesticAnimals().keySet()) {
             for (int i = 0; i < mission.getDomesticAnimals().get(name); i++) {
                 try {
                     Domestic animal = (Domestic) Class.forName(name.getPackageName()).newInstance();
-                    domesticAnimals[animal.getI()][animal.getJ()].add(animal);
+                    domesticAnimals.add(animal);
                     updateTask(animal.getClass().getSimpleName(), true);
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
                 }
             }
         }
 
-        protectiveAnimals = defineHashSet();
+        protectiveAnimals = new HashSet<>();
         for (ProtectiveList name : mission.getProtectiveAnimals().keySet()) {
             for (int i = 0; i < mission.getProtectiveAnimals().get(name); i++) {
                 try {
                     Protective animal = (Protective) Class.forName(name.getPackageName()).newInstance();
-                    protectiveAnimals[animal.getI()][animal.getJ()].add(animal);
+                    protectiveAnimals.add(animal);
                     updateTask(animal.getClass().getSimpleName(), true);
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
                 }
             }
         }
 
-        collectorAnimals = defineHashSet();
+        collectorAnimals = new HashSet<>();
         for (CollectorList name : mission.getCollectorAnimals().keySet()) {
             for (int i = 0; i < mission.getCollectorAnimals().get(name); i++) {
                 try {
                     Collector animal = (Collector) Class.forName(name.getPackageName()).newInstance();
-                    collectorAnimals[animal.getI()][animal.getJ()].add(animal);
+                    collectorAnimals.add(animal);
                     updateTask(animal.getClass().getSimpleName(), true);
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
                 }
             }
         }
 
-        wildAnimals = defineHashSet();
+        wildAnimals = new HashSet<>();
         loadWilds();
 
-        goods = defineHashSet();
-    }
-
-    private HashSet[][] defineHashSet() {
-        HashSet[][] parameters = new HashSet[SIZE][SIZE];
-        for (int i = 0; i < parameters.length; i++) {
-            for (int j = 0; j < parameters[i].length; j++) {
-                parameters[i][j] = new HashSet<>();
-            }
-        }
-        return parameters;
+        goods = new HashSet<>();
     }
 
     public void loadWilds() {
@@ -141,8 +129,7 @@ public class Game {
             for (int i = 0; i < mission.getWildAnimalsTime().get(name).length; i++) {
                 if (mission.getWildAnimalsTime().get(name)[i] == time) {
                     try {
-                        Wild animal = (Wild) Class.forName(name.getPackageName()).newInstance();
-                        wildAnimals[animal.getI()][animal.getJ()].add(animal);
+                        wildAnimals.add((Wild) Class.forName(name.getPackageName()).newInstance());
                     } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ignored) {
                     }
                 }
@@ -199,26 +186,6 @@ public class Game {
         grass[i][j]++;
     }
 
-    public HashSet<Wild> getWildAnimals(int i, int j) {
-        return wildAnimals[i][j];
-    }
-
-    public HashSet<Good> getGoods(int i, int j) {
-        return goods[i][j];
-    }
-
-    public HashSet<Domestic> getDomesticAnimals(int i, int j) {
-        return domesticAnimals[i][j];
-    }
-
-    public HashSet<Protective> getProtectiveAnimals(int i, int j) {
-        return protectiveAnimals[i][j];
-    }
-
-    public HashSet<Collector> getCollectorAnimals(int i, int j) {
-        return collectorAnimals[i][j];
-    }
-
     public HashMap<String, Integer[]> getTasks() {
         return tasks;
     }
@@ -250,14 +217,14 @@ public class Game {
     public void addDomesticAnimal(Domestic domestic) {
         coin -= domestic.getPrice();
         updateTask("Coin", true);
-        domesticAnimals[domestic.getI()][domestic.getJ()].add(domestic);
+        domesticAnimals.add(domestic);
         updateTask(domestic.getClass().getSimpleName(), true);
     }
 
     public void addProtectiveAnimal(Protective protective) {
         coin -= protective.getPrice();
         updateTask("Coin", true);
-        protectiveAnimals[protective.getI()][protective.getJ()].add(protective);
+        protectiveAnimals.add(protective);
         updateTask(protective.getClass().getSimpleName(), true);
         protective.work();
     }
@@ -265,7 +232,7 @@ public class Game {
     public void addCollectorAnimal(Collector collector) {
         coin -= collector.getPrice();
         updateTask("Coin", true);
-        collectorAnimals[collector.getI()][collector.getJ()].add(collector);
+        collectorAnimals.add(collector);
         updateTask(collector.getClass().getSimpleName(), true);
         collector.work();
     }
@@ -282,46 +249,42 @@ public class Game {
 
     public int getDomesticSpace(String name, int number) {
         int space = 0;
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                for (Domestic domestic : domesticAnimals[i][j]) {
-                    if (domestic.getClass().getSimpleName().equalsIgnoreCase(name)) {
-                        space += domestic.getSpace();
-                        number--;
-                        if (number == 0) break;
-                    }
-                }
+        for (Domestic domestic : domesticAnimals) {
+            if (domestic.getClass().getSimpleName().equalsIgnoreCase(name)) {
+                space += domestic.getSpace();
+                number--;
                 if (number == 0) break;
             }
-            if (number == 0) break;
         }
         if (number != 0) return -1;
         return space;
     }
 
     public HashSet<Domestic> getDomestic(String name, int number) {
+
+        Random rand = new Random();
+        ArrayList<Domestic> list1 = new ArrayList<>(domesticAnimals);
+        ArrayList<Domestic> list2 = new ArrayList<>();
+        for (int k = domesticAnimals.size(); k > 0; k--) {
+            list2.add(list1.remove(rand.nextInt(k)));
+        }
+
         HashSet<Domestic> removed = new HashSet<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                for (Domestic domestic : domesticAnimals[i][j]) {
-                    if (domestic.getClass().getSimpleName().equalsIgnoreCase(name)) {
-                        removed.add(domestic);
-                        number--;
-                        if (number == 0) break;
-                    }
-                }
-                domesticAnimals[i][j].removeAll(removed);
+        for (Domestic domestic : list2) {
+            if (domestic.getClass().getSimpleName().equalsIgnoreCase(name)) {
+                removed.add(domestic);
+                number--;
                 if (number == 0) break;
             }
-            if (number == 0) break;
         }
         if (number != 0) return null;
+        domesticAnimals.removeAll(removed);
         return removed;
     }
 
-    public void unloadDomestic(HashSet<Domestic> domestics) {
+    public void addDomestic(HashSet<Domestic> domestics) {
         for (Domestic domestic : domestics) {
-            domesticAnimals[domestic.getI()][domestic.getJ()].add(domestic);
+            domesticAnimals.add(domestic);
             updateTask(domestic.getClass().getSimpleName(), true);
         }
     }
@@ -335,53 +298,23 @@ public class Game {
         time++;
     }
 
-    public HashSet<Domestic> getAllDomestics() {
-        HashSet<Domestic> all = new HashSet<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                all.addAll(domesticAnimals[i][j]);
-            }
-        }
-        return all;
+    public HashSet<Domestic> getDomesticAnimals() {
+        return domesticAnimals;
     }
 
-    public HashSet<Wild> getAllWilds() {
-        HashSet<Wild> all = new HashSet<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                all.addAll(wildAnimals[i][j]);
-            }
-        }
-        return all;
+    public HashSet<Wild> getWildAnimals() {
+        return wildAnimals;
     }
 
-    public HashSet<Protective> getAllProtectives() {
-        HashSet<Protective> all = new HashSet<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                all.addAll(protectiveAnimals[i][j]);
-            }
-        }
-        return all;
+    public HashSet<Protective> getProtectiveAnimals() {
+        return protectiveAnimals;
     }
 
-    public HashSet<Collector> getAllCollectors() {
-        HashSet<Collector> all = new HashSet<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                all.addAll(collectorAnimals[i][j]);
-            }
-        }
-        return all;
+    public HashSet<Collector> getCollectorAnimals() {
+        return collectorAnimals;
     }
 
-    public HashSet<Good> getAllGoods() {
-        HashSet<Good> all = new HashSet<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                all.addAll(goods[i][j]);
-            }
-        }
-        return all;
+    public HashSet<Good> getGoods() {
+        return goods;
     }
 }

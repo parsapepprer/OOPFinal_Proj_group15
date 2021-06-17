@@ -3,6 +3,7 @@ package model.animal.wild;
 import model.Game;
 import model.animal.Animal;
 import model.animal.domestic.Domestic;
+import model.good.Good;
 
 import java.util.HashSet;
 
@@ -34,8 +35,6 @@ public abstract class Wild extends Animal {
         preJ = j;
         if (!isInCage()) {
             super.move(rand.nextBoolean(), rand.nextBoolean());
-            Game.getInstance().getWildAnimals(preI, preJ).remove(this);
-            Game.getInstance().getWildAnimals(i, j).add(this);
         }
     }
 
@@ -44,49 +43,37 @@ public abstract class Wild extends Animal {
             if (lifetime > 0) {
                 lifetime--;
                 if (lifetime == 0) {
-                    Game.getInstance().getWildAnimals(i, j).remove(this);
+                    Game.getInstance().getWildAnimals().remove(this);
                 }
             }
         } else {
             if (cageRemaining < cageNeeded) cageRemaining++;
 
-            Game.getInstance().getGoods(i, j).clear();
-            HashSet<Domestic> removedDomestic = new HashSet<>(Game.getInstance().getDomesticAnimals(i, j));
-
-            if (preI != -1 && preJ != -1) {
-                HashSet<Domestic>[] domestics = new HashSet[Game.SIZE];
-
-                if (i == preI) {
-                    for (int k = 0; k < Game.SIZE; k++) {
-                        domestics[k] = Game.getInstance().getDomesticAnimals(i, k);
+            HashSet<Good> removedGoods = new HashSet<>();
+            for (Good good : Game.getInstance().getGoods()) {
+                if (good.getI() == i && good.getJ() == j) {
+                    removedGoods.add(good);
+                } else if (preI != -1 && preJ != -1) {
+                    if (i == preI && good.getI() == i && good.getJ() >= Math.min(preJ, j) && good.getJ() <= Math.max(preJ, j)) {
+                        removedGoods.add(good);
                     }
-
-                    for (int k = Math.min(preJ, j) + 1; k < Math.max(preJ, j); k++) {
-                        Game.getInstance().getGoods(i, k).clear();
-                    }
-                }
-                if (j == preJ) {
-                    for (int k = 0; k < Game.SIZE; k++) {
-                        domestics[k] = Game.getInstance().getDomesticAnimals(k, j);
-                    }
-
-                    for (int k = Math.min(preI, i) + 1; k < Math.max(preI, i); k++) {
-                        Game.getInstance().getGoods(k, j).clear();
-                    }
-                }
-                if (domestics[0] == null) return;
-
-                for (int k = 0; k < Game.SIZE; k++) {
-                    for (Domestic domestic : domestics[k]) {
-                        if (domestic.getPreI() != -1 && domestic.getPreJ() != -1 && domestic.encounter(this)) {
-                            removedDomestic.add(domestic);
-                        }
+                    if (j == preJ && good.getJ() == j && good.getI() >= Math.min(preI, i) && good.getI() <= Math.max(preI, i)) {
+                        removedGoods.add(good);
                     }
                 }
             }
+            Game.getInstance().getGoods().removeAll(removedGoods);
 
-            for (Domestic domestic : removedDomestic) {
-                Game.getInstance().getDomesticAnimals(domestic.getI(), domestic.getJ()).remove(domestic);
+            HashSet<Domestic> removedDomestics = new HashSet<>();
+            for (Domestic domestic : Game.getInstance().getDomesticAnimals()) {
+                if (domestic.getI() == i && domestic.getJ() == j) {
+                    removedDomestics.add(domestic);
+                } else if (preI != -1 && preJ != -1 && domestic.getPreI() != -1 && domestic.getPreJ() != -1 && this.encounter(domestic)) {
+                    removedDomestics.add(domestic);
+                }
+            }
+            for (Domestic domestic : removedDomestics) {
+                Game.getInstance().getDomesticAnimals().remove(domestic);
                 Game.getInstance().updateTask(domestic.getClass().getSimpleName(), false);
             }
         }

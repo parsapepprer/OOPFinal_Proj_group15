@@ -30,6 +30,19 @@ public class GameManager {
         this.user = user;
     }
 
+    public boolean checkInvalidLevel(int level) {
+        return level <= 0 || level > MissionManager.getInstance().getNumberOfLevels();
+    }
+
+    public boolean checkLockedLevel(int level) {
+        return level > user.getLastUnlockedLevel();
+    }
+
+    public void setGame(int level) {
+        Game.initiateGame(MissionManager.getInstance().getMission(level), user);
+        this.game = Game.getInstance();
+    }
+
     public ResultType finish() {
         ResultType result = ResultType.FINISH;
         StringBuilder sb = new StringBuilder();
@@ -48,18 +61,8 @@ public class GameManager {
         return result;
     }
 
-    public boolean checkInvalidLevel(int level) {
-        return level <= 0 || level > MissionManager.getInstance().getNumberOfLevels();
-    }
-
-    public boolean checkLockedLevel(int level) {
-        return level > user.getLastUnlockedLevel();
-    }
-
-    public void setGame(int level) {
-        Game.initiateGame(MissionManager.getInstance().getMission(level), user);
-        this.game = Game.getInstance();
-
+    public boolean isFinished() {
+        return game.isFinished();
     }
 
     public ResultType well() {
@@ -81,29 +84,38 @@ public class GameManager {
             return ResultType.INVALID_NUMBER;
         }
 
-        boolean exist = false;
-        for (Wild wild : game.getWildAnimals(i - 1, j - 1)) {
-            if (wild.isInCage()) {
-                exist = true;
+        boolean exist1 = false, exist2 = false;
+        for (Wild wild : game.getWildAnimals()) {
+            if (wild.getI() == i - 1 && wild.getJ() == j - 1 && wild.isInCage()) {
+                exist1 = true;
                 break;
             }
         }
-        if (!exist && game.getGoods(i - 1, j - 1).isEmpty())
-            return ResultType.NOT_EXISTED;
+        for (Good good : game.getGoods()) {
+            if (good.getI() == i - 1 && good.getJ() == j - 1) {
+                exist2 = true;
+                break;
+            }
+        }
+        if (!exist1 && !exist2) return ResultType.NOT_EXISTED;
 
         boolean enough = true;
-        for (Wild wild : new HashSet<>(game.getWildAnimals(i - 1, j - 1))) {
-            if (wild.isInCage() && game.getWarehouse().addWild(new HashSet<>(Collections.singletonList(wild)))) {
-                game.getWildAnimals(i - 1, j - 1).remove(wild);
-                game.updateTask(wild.getClass().getSimpleName(), true);
-            } else enough = false;
+        for (Wild wild : new HashSet<>(game.getWildAnimals())) {
+            if (wild.getI() == i - 1 && wild.getJ() == j - 1 && wild.isInCage()) {
+                if (game.getWarehouse().addWild(new HashSet<>(Collections.singletonList(wild)))) {
+                    game.getWildAnimals().remove(wild);
+                    game.updateTask(wild.getClass().getSimpleName(), true);
+                } else enough = false;
+            }
         }
 
-        for (Good good : new HashSet<>(game.getGoods(i - 1, j - 1))) {
-            if (game.getWarehouse().addGood(new HashSet<>(Collections.singletonList(good)))) {
-                game.getGoods(i - 1, j - 1).remove(good);
-                game.updateTask(good.getClass().getSimpleName(), true);
-            } else enough = false;
+        for (Good good : new HashSet<>(game.getGoods())) {
+            if (good.getI() == i - 1 && good.getJ() == j - 1) {
+                if (game.getWarehouse().addGood(new HashSet<>(Collections.singletonList(good)))) {
+                    game.getGoods().remove(good);
+                    game.updateTask(good.getClass().getSimpleName(), true);
+                } else enough = false;
+            }
         }
 
         if (game.checkTaskFinished()) {
@@ -156,7 +168,7 @@ public class GameManager {
         }
 
         if (game.checkTaskFinished()) {
-            finish();
+            return finish();
         }
 
         if (exist) return ResultType.SUCCESS;
@@ -202,16 +214,18 @@ public class GameManager {
         }
 
         boolean exist = false;
-        for (Wild wild : game.getWildAnimals(i - 1, j - 1)) {
-            if (!wild.isInCage()) {
-                exist = true;
-                break;
+        for (Wild wild : game.getWildAnimals()) {
+            if (wild.getI() == i - 1 && wild.getJ() == j - 1) {
+                if (!wild.isInCage()) {
+                    exist = true;
+                    break;
+                }
             }
         }
         if (!exist) return ResultType.NOT_EXISTED;
 
-        for (Wild wild : game.getWildAnimals(i - 1, j - 1)) {
-            if (!wild.isInCage()) {
+        for (Wild wild : game.getWildAnimals()) {
+            if (wild.getI() == i - 1 && wild.getJ() == j - 1 && !wild.isInCage()) {
                 wild.addCage();
             }
         }
@@ -290,7 +304,7 @@ public class GameManager {
             for (Animal animal : game.getTruck().getAnimal(domesticList.getClassName(), number)) {
                 domestics.add((Domestic) animal);
             }
-            game.unloadDomestic(domestics);
+            game.addDomestic(domestics);
             return ResultType.SUCCESS;
         }
 
@@ -313,6 +327,10 @@ public class GameManager {
         return game.getTruck().go();
     }
 
+    public boolean truckInUse() {
+        return !game.getTruck().isEmpty() && !game.getTruck().isWorking();
+    }
+
     public String inquiry() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append("Time = ").append(game.getTime()).append("\n");
@@ -329,54 +347,34 @@ public class GameManager {
 
         sb.append(game.getWell().toString());
 
-        if (!game.getAllDomestics().isEmpty()) {
+        if (!game.getDomesticAnimals().isEmpty()) {
             sb.append("\n").append("Domestics:\n");
-            for (int i = 0; i < Game.SIZE; i++) {
-                for (int j = 0; j < Game.SIZE; j++) {
-                    for (Animal animal : game.getDomesticAnimals(i, j)) {
-                        sb.append("\t").append(animal.toString()).append("\n");
-                    }
-                }
+            for (Animal animal : game.getDomesticAnimals()) {
+                sb.append("\t").append(animal.toString()).append("\n");
             }
         }
-        if (!game.getAllWilds().isEmpty()) {
+        if (!game.getWildAnimals().isEmpty()) {
             sb.append("\n").append("Wilds:\n");
-            for (int i = 0; i < Game.SIZE; i++) {
-                for (int j = 0; j < Game.SIZE; j++) {
-                    for (Animal animal : game.getWildAnimals(i, j)) {
-                        sb.append("\t").append(animal.toString()).append("\n");
-                    }
-                }
+            for (Animal animal : game.getWildAnimals()) {
+                sb.append("\t").append(animal.toString()).append("\n");
             }
         }
-        if (!game.getAllProtectives().isEmpty()) {
+        if (!game.getProtectiveAnimals().isEmpty()) {
             sb.append("\n").append("Protectives:\n");
-            for (int i = 0; i < Game.SIZE; i++) {
-                for (int j = 0; j < Game.SIZE; j++) {
-                    for (Animal animal : game.getProtectiveAnimals(i, j)) {
-                        sb.append("\t").append(animal.toString()).append("\n");
-                    }
-                }
+            for (Animal animal : game.getProtectiveAnimals()) {
+                sb.append("\t").append(animal.toString()).append("\n");
             }
         }
-        if (!game.getAllCollectors().isEmpty()) {
+        if (!game.getCollectorAnimals().isEmpty()) {
             sb.append("\n").append("Collectors:\n");
-            for (int i = 0; i < Game.SIZE; i++) {
-                for (int j = 0; j < Game.SIZE; j++) {
-                    for (Animal animal : game.getCollectorAnimals(i, j)) {
-                        sb.append("\t").append(animal.toString()).append("\n");
-                    }
-                }
+            for (Animal animal : game.getCollectorAnimals()) {
+                sb.append("\t").append(animal.toString()).append("\n");
             }
         }
-        if (!game.getAllGoods().isEmpty()) {
+        if (!game.getGoods().isEmpty()) {
             sb.append("\n").append("Goods:\n");
-            for (int i = 0; i < Game.SIZE; i++) {
-                for (int j = 0; j < Game.SIZE; j++) {
-                    for (Good good : game.getGoods(i, j)) {
-                        sb.append("\t").append(good.toString()).append("\n");
-                    }
-                }
+            for (Good good : game.getGoods()) {
+                sb.append("\t").append(good.toString()).append("\n");
             }
         }
         if (!game.getFactories().isEmpty()) {
@@ -416,7 +414,6 @@ public class GameManager {
                         result.setValue(factory.getClass().getSimpleName());
                         return result;
                     }
-
                 }
             }
         }
@@ -471,7 +468,7 @@ public class GameManager {
         for (int i = 0; i < n; i++) {
             update();
             if (game.checkTaskFinished()) {
-                finish();
+                return finish();
             }
         }
         ResultType result = ResultType.SUCCESS;
@@ -483,23 +480,23 @@ public class GameManager {
         game.increaseTime();
         game.getWell().update();
         game.getTruck().update();
-        for (Domestic domestic : game.getAllDomestics()) {
+        for (Domestic domestic : game.getDomesticAnimals()) {
             domestic.move();
         }
-        for (Wild wild : game.getAllWilds()) {
+        for (Wild wild : game.getWildAnimals()) {
             wild.move();
         }
-        for (Protective protective : game.getAllProtectives()) {
+        for (Protective protective : game.getProtectiveAnimals()) {
             protective.move();
         }
-        for (Collector collector : game.getAllCollectors()) {
+        for (Collector collector : game.getCollectorAnimals()) {
             collector.move();
         }
         game.loadWilds();
-        for (Protective protective : game.getAllProtectives()) {
+        for (Protective protective : new HashSet<>(game.getProtectiveAnimals())) {
             protective.work();
         }
-        for (Wild wild : game.getAllWilds()) {
+        for (Wild wild : game.getWildAnimals()) {
             wild.work();
         }
         ArrayList<Domestic> domestics = new ArrayList<>();
@@ -509,8 +506,8 @@ public class GameManager {
             for (int j = 0; j < Game.SIZE; j++) {
                 domestics.clear();
                 number = grass[i][j];
-                for (Domestic domestic : game.getDomesticAnimals(i, j)) {
-                    if (domestic.isHungry())
+                for (Domestic domestic : game.getDomesticAnimals()) {
+                    if (domestic.getI() == i && domestic.getJ() == j && domestic.isHungry())
                         domestics.add(domestic);
                 }
                 if (number >= domestics.size()) {
@@ -533,25 +530,17 @@ public class GameManager {
                 }
             }
         }
-        for (Domestic domestic : game.getAllDomestics()) {
+        for (Domestic domestic : new HashSet<>(game.getDomesticAnimals())) {
             domestic.work();
         }
         for (Factory factory : game.getFactories()) {
             factory.update();
         }
-        for (Collector collector : game.getAllCollectors()) {
+        for (Collector collector : game.getCollectorAnimals()) {
             collector.work();
         }
-        for (Good good : game.getAllGoods()) {
+        for (Good good : new HashSet<>(game.getGoods())) {
             good.update();
         }
-    }
-
-    public boolean isFinished() {
-        return game.isFinished();
-    }
-
-    public boolean truckInUse() {
-        return !game.getTruck().isEmpty() && !game.getTruck().isWorking();
     }
 }

@@ -77,14 +77,16 @@ public abstract class Animal {
     public boolean encounter(Animal that) {
         if (this.i != this.preI && this.j != this.preJ) return false;
         if (that.j != that.preJ && that.i != that.preI) return false;
-        if (this.i == this.preI && that.j == that.preJ) return false;
-        if (this.j == this.preJ && that.i == that.preI) return false;
-        if (this.i == this.preI) {
+        if (this.i == this.preI && that.j == that.preJ && this.j != this.preJ && that.i != that.preI) return false;
+        if (this.i != this.preI && that.j != that.preJ && this.j == this.preJ && that.i == that.preI) return false;
+
+        if (this.i == this.preI && this.i == that.i) {
             if ((this.j >= that.j && this.preJ <= that.j && this.j <= that.preJ) || (that.j >= this.j && that.preJ <= this.j && that.j <= this.preJ)) return true;
             if ((this.j <= that.j && this.preJ <= that.j && this.j >= that.preJ && this.preJ >= that.preJ) || (that.j <= this.j && that.preJ <= this.j && that.j >= this.preJ && that.preJ >= this.preJ)) return true;
             if ((this.j <= that.preJ && this.preJ <= that.preJ && this.j >= that.j && this.preJ >= that.j) || (that.j <= this.preJ && that.preJ <= this.preJ && that.j >= this.j && that.preJ >= this.j)) return true;
         }
-        if (this.j == this.preJ) {
+
+        if (this.j == this.preJ && this.j == that.j) {
             if ((this.i >= that.i && this.preI <= that.i && this.i <= that.preI) || (that.i >= this.i && that.preI <= this.i && that.i <= this.preI)) return true;
             if ((this.i <= that.i && this.preI <= that.i && this.i >= that.preI && this.preI >= that.preI) || (that.i <= this.i && that.preI <= this.i && that.i >= this.preI && that.preI >= this.preI)) return true;
             if ((this.i <= that.preI && this.preI <= that.preI && this.i >= that.i && this.preI >= that.i) || (that.i <= this.preI && that.preI <= this.preI && that.i >= this.i && that.preI >= this.i)) return true;
